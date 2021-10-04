@@ -1,0 +1,1 @@
+A university final project to detect musical chords using Neural Networks
