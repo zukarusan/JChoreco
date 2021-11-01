@@ -3,9 +3,13 @@ package id.ac.president.choreco.util;
 import org.math.plot.Plot2DPanel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.util.concurrent.Phaser;
+
+import static javax.swing.UIManager.getColor;
 
 public class PlotManager {
     private static volatile PlotManager instance;
@@ -47,6 +51,42 @@ public class PlotManager {
             }
         });
     }
+
+    public void createSpectrogram(String name, float[][] normalized_data) {
+        closePhaser.register();
+        int nY = normalized_data[0].length,
+            nX = normalized_data.length;
+
+        BufferedImage specImg = new BufferedImage(
+                nX,
+                nY,
+                BufferedImage.TYPE_INT_RGB);
+
+        float ratio;
+        for(int x = 0; x<nX; x++){
+            for(int y = 0; y<nY; y++){
+                ratio = normalized_data[x][y];
+
+                Color newColor = Color.getHSBColor(
+                        (ratio)*1.3f,
+                        1,
+                        ratio
+                );
+                specImg.setRGB(x, y, newColor.getRGB());
+
+            }
+        }
+
+        JPanel spectrogram = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(specImg, 0, 0, this);
+            }
+        };
+        createFrame(name, spectrogram);
+    }
+
 
     public void createPlot(String name, String label, float[] data) {
         Plot2DPanel plot = new Plot2DPanel();

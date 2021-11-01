@@ -10,12 +10,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 @Getter
 public class Sound {
-    private String name;
-    private List<int[]> samples;
+    private final String name;
+    private List<float[]> samples;
     private final int sampleRate;
-    private int totalSamples; // all channels
+    private int totalSamples; // including all channel
+
     private int channelNums;
     private int sampleSize; // size in Byte unit
     private final float Max_Second;
@@ -57,12 +59,13 @@ public class Sound {
         int channelSize = sampleSizeInBits >> 3; // * 8
         int chunkSize = channelSize * channelNums;
         int totalChunks = dataSize / chunkSize;
+        final float divFloat = 1.0f/32768.0f;
 
         this.sampleSize = channelSize;
         this.channelNums = channelNums;
         this.totalSamples = totalChunks * channelNums;
 
-        int[] channelsOfSamples = new int[totalSamples];
+        float[] channelsOfSamples = new float[totalSamples];
 
         for (int k = 0; k < totalChunks; k++) {
             int kIndex = k * chunkSize;
@@ -82,7 +85,7 @@ public class Sound {
                     default:
                         throw new SoundException("SOUND_BIT_DEPTH", "Sound only support 8-bit or 16-bit depth");
                 }
-                channelsOfSamples[indexOut] = ByteBuffer
+                channelsOfSamples[indexOut] = (float) ByteBuffer
                         .wrap(sampleByte)
                         .order(byteOrder)
                         .getInt();
@@ -91,7 +94,7 @@ public class Sound {
 
         samples = new ArrayList<>();
         for(int i = 0; i < channelNums; ++i) {
-            int[] sampleChannel = new int[totalChunks];
+            float[] sampleChannel = new float[totalChunks];
             System.arraycopy(
                     channelsOfSamples,i * totalChunks,
                     sampleChannel, 0,
@@ -101,11 +104,11 @@ public class Sound {
 
     }
 
-    public int[] getSamples(int channel) {
+    public float[] getSamples(int channel) {
         return samples.get(channel);
     }
 
-    public int[] getSamplesOfRange(int channel, float second, int length) throws SoundException {
+    public float[] getSamplesOfRange(int channel, float second, int length) throws SoundException {
         try {
             int begin = (int) (sampleRate * second);
             int channelSamples = totalSamples / 2;
@@ -132,7 +135,7 @@ public class Sound {
     public void plot() {
         PlotManager plotManager = PlotManager.getInstance();
         int i = 0;
-        for (int[] samp: samples) {
+        for (float[] samp: samples) {
             plotManager.createPlot(
                     "\""+name +"\" - Channel: "+ (1 + i++),
                     "Frequencies",
