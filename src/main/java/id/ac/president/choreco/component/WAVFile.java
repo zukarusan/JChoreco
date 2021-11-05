@@ -1,14 +1,12 @@
 package id.ac.president.choreco.component;
 
-import id.ac.president.choreco.component.exception.SoundException;
+import id.ac.president.choreco.component.exception.SignalException;
 import id.ac.president.choreco.util.PlotManager;
 import lombok.Getter;
-import java.io.FilterInputStream;
+
 import javax.sound.sampled.*;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -34,17 +32,17 @@ public class WAVFile {
     Clip clip;
     private boolean canPlay;
 
-    public WAVFile(File file) throws SoundException {
+    public WAVFile(File file) throws SignalException {
         try {
             dataSize = this.load(file);
             name = file.getName();
         } catch (UnsupportedAudioFileException | IOException e) {
-            throw new SoundException("UNABLE_OPEN", "Data may be corrupted or unsupported format", e);
+            throw new SignalException("UNABLE_OPEN", "Data may be corrupted or unsupported format", e);
         }
     }
 
 
-    public int load(File file) throws UnsupportedAudioFileException, IOException, SoundException {
+    public int load(File file) throws UnsupportedAudioFileException, IOException, SignalException {
 
         audioInputStream = AudioSystem.getAudioInputStream(file);
         audioFormat = audioInputStream.getFormat();
@@ -90,9 +88,9 @@ public class WAVFile {
             int sampleSizeInBits,
             int channelNums,
             boolean isBigEndian
-    ) throws SoundException {
+    ) throws SignalException {
         if (rawData == null) {
-            throw new SoundException("SOUND_NO_DATA", "Sound does not have data");
+            throw new SignalException("SOUND_NO_DATA", "Sound does not have data");
         }
         ByteOrder byteOrder = isBigEndian ? ByteOrder.BIG_ENDIAN : ByteOrder.LITTLE_ENDIAN;
 
@@ -129,7 +127,7 @@ public class WAVFile {
                         sampleByte[3] = rawData[kIndex + jIndex + 1];
                         break;
                     default:
-                        throw new SoundException("SOUND_BIT_DEPTH", "Sound only support 8-bit or 16-bit depth");
+                        throw new SignalException("SOUND_BIT_DEPTH", "Sound only support 8-bit or 16-bit depth");
                 }
                 channelsOfSamples[indexOut] = (float) ByteBuffer
                         .wrap(sampleByte)
@@ -158,7 +156,7 @@ public class WAVFile {
         return samples.get(channel);
     }
 
-    public Signal getSamplesOfRange(int channel, float second, int length) throws SoundException {
+    public Signal getSamplesOfRange(int channel, float second, int length) throws SignalException {
         try {
             int begin = (int) (audioFormat.getSampleRate() * second);
             int channelSamples = totalSamples / 2;
@@ -172,7 +170,7 @@ public class WAVFile {
                     Signal.Domain.TIME_DOMAIN
                     );
         } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
-            throw new SoundException("SOUND_SAMPLES_GET", "Second or length is out of samples");
+            throw new SignalException("SOUND_SAMPLES_GET", "Second or length is out of samples");
         }
     }
 

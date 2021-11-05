@@ -1,8 +1,9 @@
+import id.ac.president.choreco.component.Spectrum;
 import id.ac.president.choreco.component.WAVFile;
 import id.ac.president.choreco.system.STFT;
 import id.ac.president.choreco.component.Signal;
 import id.ac.president.choreco.system.exception.STFTException;
-import id.ac.president.choreco.component.exception.SoundException;
+import id.ac.president.choreco.component.exception.SignalException;
 import id.ac.president.choreco.system.SignalProcessor;
 import id.ac.president.choreco.util.PlotManager;
 import org.junit.jupiter.api.Disabled;
@@ -17,13 +18,13 @@ public class PlotSignalTest {
     WAVFile WAVFile;
 
 
-    PlotSignalTest() throws SoundException {
+    PlotSignalTest() throws SignalException {
         assert url != null;
         File file = new File(url.getPath());
         WAVFile = new WAVFile(file);
     }
     @Test @Disabled
-    public void testPlot() throws SoundException {
+    public void testPlot() throws SignalException {
 
         Signal signal = WAVFile.getSamples(0);
         signal.setName("Test audio plot");
@@ -35,7 +36,7 @@ public class PlotSignalTest {
         PlotManager.getInstance().waitForClose();
     }
 
-    @Test //@Disabled
+    @Test @Disabled
     public void testFFTPlot() throws STFTException {
         assert url != null;
         Signal signal = WAVFile.getSamples(0);
@@ -66,7 +67,7 @@ public class PlotSignalTest {
         plotManager.waitForClose();
     }
 
-    @Test @Disabled
+    @Test //@Disabled
     public void testSpectrogram() throws STFTException {
         assert url != null;
 
@@ -79,17 +80,17 @@ public class PlotSignalTest {
                 512,
                 signal.getSampleRate());
         PlotManager plotManager= PlotManager.getInstance();
-        float[][] data = stft.process();
-        SignalProcessor.powerToDb(data);
-        SignalProcessor.normalize(data);
-//        data = SignalProcessor.trimOfRange(data, 100, 5000, sound.getSampleRate());
+        Spectrum spectrum = stft.process();
+        SignalProcessor.powerToDb(spectrum);
+        SignalProcessor.normalize(spectrum);
+//        spectrum = SignalProcessor.trimOfRange(spectrum, 100, 5000, sound.getSampleRate());
 
-//        for (float[] d : data) {
+//        for (float[] d : spectrum) {
 //            plotManager.createPlot(
 //                    "TestFFT", "Test", d
 //            );
 //        }
-        plotManager.createSpectrogram(signal.getName(), data);
+        plotManager.createSpectrogram(signal.getName(), spectrum.getDataBuffer());
         plotManager.waitForClose();
     }
 }

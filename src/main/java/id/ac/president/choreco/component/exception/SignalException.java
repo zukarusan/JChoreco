@@ -1,14 +1,14 @@
 package id.ac.president.choreco.component.exception;
 
-public class SoundException extends Exception{
+public class SignalException extends Exception{
     private String code;
 
-    public SoundException(String code, String message) {
+    public SignalException(String code, String message) {
         super(message);
         this.setCode(code);
     }
 
-    public SoundException(String code, String message, Throwable cause) {
+    public SignalException(String code, String message, Throwable cause) {
         super(message, cause);
         this.setCode(code);
     }

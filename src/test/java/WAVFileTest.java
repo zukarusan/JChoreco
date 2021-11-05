@@ -1,5 +1,5 @@
 import id.ac.president.choreco.component.WAVFile;
-import id.ac.president.choreco.component.exception.SoundException;
+import id.ac.president.choreco.component.exception.SignalException;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +8,7 @@ import java.net.URL;
 
 public class WAVFileTest {
     @Test @Disabled
-    public void createAudioFile() throws SoundException, InterruptedException {
+    public void createAudioFile() throws SignalException, InterruptedException {
         URL url = getClass().getResource("ui_layer.wav");
 
         assert url != null;

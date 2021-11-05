@@ -3,13 +3,14 @@ package id.ac.president.choreco.system;
 import be.tarsos.dsp.util.fft.FFT;
 import be.tarsos.dsp.util.fft.HannWindow;
 import id.ac.president.choreco.component.Signal;
+import id.ac.president.choreco.component.Spectrum;
 import id.ac.president.choreco.system.exception.STFTException;
 import lombok.Getter;
 
 import java.util.Arrays;
 
 public class STFT {
-    private final float[] signalBuffer;
+    private final float[] signalBuffer; // need to develop to be buffer stream
     @Getter private final int frameSize;
     @Getter private final int hopSize;
     @Getter private final float sampleRate;
@@ -32,7 +33,7 @@ public class STFT {
         this.frequencyResolutionFFT = sampleRate / buffer.getData().length;
     }
 
-    public float[][] process() {
+    public Spectrum process() { // Need to developed to be spectrum output buffer
         fft = new FFT(frameSize);
         int frameTotal = (signalBuffer.length - frameSize) / hopSize + 1;
         int binLength = frameSize / 2;
@@ -59,7 +60,7 @@ public class STFT {
             }
 
         }
-        return bins;
+        return new Spectrum("stftFrame"+frameSize, bins, sampleRate, frequencyResolution);
     }
 
     private static void windowFunc(float[] data) {

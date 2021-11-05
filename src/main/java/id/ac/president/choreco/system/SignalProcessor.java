@@ -1,6 +1,7 @@
 package id.ac.president.choreco.system;
 
 import id.ac.president.choreco.component.Signal;
+import id.ac.president.choreco.component.Spectrum;
 import id.ac.president.choreco.system.exception.STFTException;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
@@ -80,19 +81,26 @@ public class SignalProcessor {
 
 
     // data input in frequency-domain with amplitudes (not in complex number representation)
-    public static float[][] trimOfRange(float[][] fft_amp_data, float from_freq, float to_freq, float freq_res) {
+    public static Spectrum trimOfRange(Spectrum fft_amp_data, float from_freq, float to_freq) {
+        float[][] data = fft_amp_data.getDataBuffer();
+        float freq_res = fft_amp_data.getFrequencyResolution();
         int idx_from = freqToIdx(from_freq, freq_res);
         int idx_to = freqToIdx(to_freq, freq_res);
         int length = idx_to-idx_from+1;
-        float[][] trimmed = new float[fft_amp_data.length][length];
+        float[][] trimmed = new float[data.length][length];
         for (int i = 0; i < trimmed.length; i ++) {
             System.arraycopy(
-                    fft_amp_data[i], idx_from,
+                    data[i], idx_from,
                     trimmed[i], 0,
                     length
             );
         }
-        return trimmed;
+        return new Spectrum(
+                "trimmed"+from_freq+"-"+to_freq+"_"+fft_amp_data.getName(),
+                trimmed,
+                fft_amp_data.getSampleRate(),
+                freq_res
+                );
     }
 
     public static Signal trimOfRange(Signal fft_amp_data, float from_freq, float to_freq, float freq_res) throws STFTException {
@@ -118,7 +126,8 @@ public class SignalProcessor {
                 );
     }
 
-    public static void normalize(float[][] data) {
+    public static void normalize(Spectrum spectrum) {
+        float[][] data = spectrum.getDataBuffer();
         int frameTotal = data.length;
         int n = data[0].length;
         float maxAmp = data[0][0], minAmp = maxAmp;
@@ -161,7 +170,8 @@ public class SignalProcessor {
         }
     }
 
-    public static void powerToDb(float[][] data) {
+    public static void powerToDb(Spectrum spectrum) {
+        float[][] data = spectrum.getDataBuffer();
         int frameTotal = data.length;
         int n = data[0].length;
         for (int i = 0; i < frameTotal; i++) {

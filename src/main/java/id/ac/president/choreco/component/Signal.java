@@ -1,10 +1,8 @@
 package id.ac.president.choreco.component;
 
-import id.ac.president.choreco.component.exception.SoundException;
 import id.ac.president.choreco.util.PlotManager;
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Getter
 public class Signal {
@@ -25,10 +23,9 @@ public class Signal {
 
     @Setter
     private String name;
-    private final float[] data;
+    private final float[] data; // need to develop to be buffer stream
     private final float sampleRate;
     private final Domain domain;
-
     private final float totalSecond;
 
     public Signal(String labelName, float[] data, float sampleRate, Domain domain)  {
@@ -48,6 +45,5 @@ public class Signal {
                 data);
     }
 
-
-
 }
+
