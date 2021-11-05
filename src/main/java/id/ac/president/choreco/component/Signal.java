@@ -1,0 +1,53 @@
+package id.ac.president.choreco.component;
+
+import id.ac.president.choreco.component.exception.SoundException;
+import id.ac.president.choreco.util.PlotManager;
+import lombok.Getter;
+import lombok.Setter;
+
+
+@Getter
+public class Signal {
+
+    public static final class Domain {
+        private final int domain;
+
+        private Domain(int domain) { this.domain = domain; }
+
+        public static final Domain FREQUENCY_DOMAIN = new Domain(0);
+        public static final Domain TIME_DOMAIN = new Domain(1);
+
+        @Override
+        public String toString() {
+            return Integer.toString(domain);
+        }
+    }
+
+    @Setter
+    private String name;
+    private final float[] data;
+    private final float sampleRate;
+    private final Domain domain;
+
+    private final float totalSecond;
+
+    public Signal(String labelName, float[] data, float sampleRate, Domain domain)  {
+        this.data = data;
+        this.sampleRate = sampleRate;
+        this.totalSecond =  (float)(data.length) / sampleRate;
+        this.name = labelName;
+        this.domain = domain;
+    }
+
+    public void plot() {
+        PlotManager plotManager = PlotManager.getInstance();
+
+        plotManager.createPlot(
+                name,
+                "Frequencies",
+                data);
+    }
+
+
+
+}

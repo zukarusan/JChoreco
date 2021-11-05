@@ -1,4 +1,4 @@
-package id.ac.president.choreco.component.exception;
+package id.ac.president.choreco.system.exception;
 
 public class STFTException extends Exception{
     private String code;

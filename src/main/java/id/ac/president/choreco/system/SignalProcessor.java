@@ -1,6 +1,11 @@
 package id.ac.president.choreco.system;
 
+import id.ac.president.choreco.component.Signal;
+import id.ac.president.choreco.system.exception.STFTException;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SignalProcessor {
@@ -11,7 +16,7 @@ public class SignalProcessor {
         SummaryStatistics stats = new SummaryStatistics();
 
         // the results (peaks, 1 or -1) of our algorithm
-        int[] signals = new int[data.length];
+        List<Integer> peaks = new ArrayList<>();
 
         // init average and standard deviation
         for (float datum : data) {
@@ -27,28 +32,57 @@ public class SignalProcessor {
             // if the distance between the current value and average is enough standard deviations (threshold) away
             if (Math.abs(data[i] - avg) > threshold * std) {
 
+                peaks.add(i);
+                //peaks[i] = 1;
                 // this is a signal (i.e. peak), determine if it is a positive or negative signal
-                if (data[i] > avg) {
-                    signals[i] = 1;
-                } else {
-                    signals[i] = -1;
-                }
-            } else {
-                // ensure this signal remains a zero
-                signals[i] = 0;
+//                if (data[i] > avg) {
+//                    peaks[i]    = 1;
+//                } else {
+//                    peaks[i] = -1;
+//                }
+
             }
+//            else {
+//                // ensure this signal remains a zero
+//                peaks[i] = 0;
+//            }
         }
 
-        return signals;
-
+        return peaks.stream().mapToInt(i -> i).toArray();
     }
 
-    // data input in frequency-domain with amplitudes (not in complex number representation)
-    public static float[][] trimOfRange(float[][] fft_amp_data, float from_freq, float to_freq, float sampleRate) {
-        float freq_res = sampleRate / (fft_amp_data[0].length * 2);
+    public static int freqToIdx(float frequency, float freq_res) {
+        return (int) (frequency / freq_res);
+    }
 
-        int idx_from = (int) (from_freq / freq_res);
-        int idx_to = (int) (to_freq / freq_res);
+    public static int[] freqToIdx(float[] frequencies, float freq_res) {
+        int[] indexes = new int[frequencies.length];
+
+        for (int i = 0; i < frequencies.length; i++) {
+            indexes[i] = (int) (frequencies[i] / freq_res);
+        }
+        return indexes;
+    }
+
+    public static float idxToFreq(int index, float freq_res) {
+        return freq_res * index;
+    }
+
+    public static float[] idxToFreq(int[] indexes, float sampleRate, int dataLength) {
+        float freq_res = sampleRate / (dataLength);
+        float[] frequencies = new float[indexes.length];
+
+        for (int i = 0; i < indexes.length; i++) {
+            frequencies[i] = freq_res * indexes[i];
+        }
+        return frequencies;
+    }
+
+
+    // data input in frequency-domain with amplitudes (not in complex number representation)
+    public static float[][] trimOfRange(float[][] fft_amp_data, float from_freq, float to_freq, float freq_res) {
+        int idx_from = freqToIdx(from_freq, freq_res);
+        int idx_to = freqToIdx(to_freq, freq_res);
         int length = idx_to-idx_from+1;
         float[][] trimmed = new float[fft_amp_data.length][length];
         for (int i = 0; i < trimmed.length; i ++) {
@@ -61,22 +95,30 @@ public class SignalProcessor {
         return trimmed;
     }
 
-    public static float[] trimOfRange(float[] fft_amp_data, float from_freq, float to_freq, float sampleRate) {
-        float freq_res = sampleRate / (fft_amp_data.length * 2);
+    public static Signal trimOfRange(Signal fft_amp_data, float from_freq, float to_freq, float freq_res) throws STFTException {
+        if (fft_amp_data.getDomain() != Signal.Domain.FREQUENCY_DOMAIN) {
+            throw new STFTException("SIGNAL_DOMAIN_MISMATCH", "Signal must be in Frequency-domain", new IllegalArgumentException("fft_amp_data not match"));
+        }
+        float[] data = fft_amp_data.getData();
 
         int idx_from = (int) (from_freq / freq_res);
         int idx_to = (int) (to_freq / freq_res);
         int length = idx_to-idx_from+1;
         float[] trimmed = new float[length];
         System.arraycopy(
-                fft_amp_data, idx_from,
+                data, idx_from,
                 trimmed, 0,
                 length
         );
-        return trimmed;
+        return new Signal(
+                "trimmed"+from_freq+"-"+to_freq+"_"+fft_amp_data.getName(),
+                trimmed,
+                fft_amp_data.getSampleRate(),
+                Signal.Domain.FREQUENCY_DOMAIN
+                );
     }
 
-    public static void normalizePower(float[][] data) {
+    public static void normalize(float[][] data) {
         int frameTotal = data.length;
         int n = data[0].length;
         float maxAmp = data[0][0], minAmp = maxAmp;
@@ -102,7 +144,8 @@ public class SignalProcessor {
         }
     }
 
-    public static void normalizePower(float[] data) {
+    public static void normalize(Signal signal) {
+        float[] data = signal.getData();
         float maxAmp = data[0], minAmp = maxAmp;
 
         for (int i = 0; i + 1 < data.length; i++) {
@@ -130,7 +173,8 @@ public class SignalProcessor {
         }
     }
 
-    public static void powerToDb(float[] data) {
+    public static void powerToDb(Signal signal) {
+        float[] data = signal.getData();
         for (int i = 0; i < data.length; i++) {
             data[i] = (float) (10 * Math.log10(data[i]));
         }
