@@ -21,14 +21,14 @@ public class SoundFIleTest {
         WAVFile.play();
     }
 
-    @Test
+    @Test// @Disabled
     public void createMp3File() {
         URL url = getClass().getResource("major.mp3");
 
         assert url != null;
         File file = new File(url.getPath());
-        SoundFile mp3File = new MP3File(file);
-        mp3File.play();
+        MP3File mp3File = new MP3File(file);
+        mp3File.loop(2);
         mp3File.waitUntilStop();
     }
 }

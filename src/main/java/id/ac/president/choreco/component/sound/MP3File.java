@@ -16,7 +16,7 @@ public class MP3File extends SoundFile {
 
     private AdvancedPlayer mp3Player;
     private CountDownLatch playLatch, loopLatch;
-    private PlaybackListener mp3Playback = new PlaybackListener() {
+    private final PlaybackListener mp3Playback = new PlaybackListener() {
         @Override
         public void playbackFinished(PlaybackEvent evt) {
             super.playbackFinished(evt);
@@ -47,18 +47,25 @@ public class MP3File extends SoundFile {
         Header mp3Header;
         try {
             mp3Header = mp3Stream.readFrame();
-        } catch (BitstreamException e) {
-            throw new SoundException("UNABLE_EXTRACT", "Mp3 failed to decode", e);
+
+            if (mp3Header != null) {
+                buffer = (SampleBuffer) mp3Decoder.decodeFrame(mp3Header, mp3Stream);
+                af = new AudioFormat(
+                        MP3File.MP3,
+                        buffer.getSampleFrequency(),
+                        16, // Default PCM bit from javazoom.jl.decoder package
+                        buffer.getChannelCount(),
+                        mp3Header.framesize,
+                        1f / (mp3Header.ms_per_frame() * 1000),
+                        false
+                );
+            }
+            else {
+                throw new SoundException("UNABLE_DECODE", "No mp3 header is read");
+            }
+        } catch (BitstreamException | DecoderException e) {
+            throw new SoundException("UNABLE_DECODE", "Mp3 failed to decode", e);
         }
-        af = new AudioFormat(
-                MP3File.MP3,
-                mp3Header.sample_frequency(),
-                16, // Default PCM bit from javazoom.jl.decoder package
-                mp3Decoder.getOutputChannels(),
-                mp3Header.framesize,
-                1f / (mp3Header.ms_per_frame() * 1000),
-                false
-        );
 
         byte[] sample = new byte[2];
         try {
@@ -67,37 +74,43 @@ public class MP3File extends SoundFile {
                 bufferSamples = buffer.getBuffer();
                 sampleSize = buffer.getBufferLength();
 
-                for (int i = 0; i < sampleSize; i++) {
-                    sample[0] = (byte)(bufferSamples[i] & 0xff);
-                    sample[1] = (byte)((bufferSamples[i] >> 8) & 0xff);
-                    os.write(sample);
+                synchronized (this) {
+                    for (int i = 0; i < sampleSize; i++) {
+                        sample[0] = (byte)(bufferSamples[i] & 0xff);
+                        sample[1] = (byte)((bufferSamples[i] >> 8) & 0xff);
+                        os.write(sample);
+                    }
                 }
 
+                mp3Stream.closeFrame();
                 mp3Header = mp3Stream.readFrame();
             }
+            mp3Stream.close();
         } catch (BitstreamException | DecoderException | IOException e) {
             throw new SoundException("UNABLE_EXTRACT", "Mp3 failed to decode", e);
         }
+
         return af;
     }
 
     @Override
     public int load(File file) throws SoundException {
-        FileInputStream fileInputStream;
+        FileInputStream decodingInputStream, playingInputStream;
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        int totalRead;
         try{
-            fileInputStream = new FileInputStream(file);
+            decodingInputStream = new FileInputStream(file);
+            playingInputStream = new FileInputStream(file);
         } catch (IOException e) {
             throw new SoundException("UNABLE_READ", "File may be corrupted or unsupported format", e);
         }
-        initPlayer(fileInputStream);
+        initPlayer(new BufferedInputStream(playingInputStream));
 
-        audioFormat = decodeAll(fileInputStream, outputStream);
-        extractSamples(outputStream.toByteArray(), audioFormat);
+        audioFormat = decodeAll(decodingInputStream, outputStream);
+        byte[] data = outputStream.toByteArray();
+        extractSamples(data, audioFormat);
 
-        return 0;
+        return data.length;
     }
 
     @Override
