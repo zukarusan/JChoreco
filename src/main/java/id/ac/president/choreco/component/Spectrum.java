@@ -26,8 +26,11 @@ public class Spectrum {
     // get fft-analyzed frequencies at given time
     public Signal getSignalAt(float second){
         int idx = (int) (second * frequencyResolution);
+        if (idx >= dataBuffer.length)
+            throw new IllegalArgumentException("Out of range index, maximum length: "+
+                    String.format("%.2f", dataBuffer.length/frequencyResolution)+" seconds");
         return new Signal(
-                "SignalAt"+String.format("%.1f",second)+"Of"+name,
+                "SignalAt"+String.format("%.1f",second)+"_"+name,
                 dataBuffer[idx],
                 sampleRate,
                 domain);

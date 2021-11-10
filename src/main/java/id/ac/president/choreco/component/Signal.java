@@ -23,17 +23,17 @@ public class Signal {
 
     @Setter
     private String name;
+    private final Domain domain;
     private final float[] data; // need to develop to be buffer stream
     private final float sampleRate;
-    private final Domain domain;
     private final float totalSecond;
 
     public Signal(String labelName, float[] data, float sampleRate, Domain domain)  {
         this.data = data;
-        this.sampleRate = sampleRate;
-        this.totalSecond =  (float)(data.length) / sampleRate;
-        this.name = labelName;
         this.domain = domain;
+        this.name = labelName;
+        this.sampleRate = sampleRate;
+        this.totalSecond = (float)(data.length) / sampleRate;
     }
 
     public void plot() {

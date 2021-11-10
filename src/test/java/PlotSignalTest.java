@@ -1,5 +1,6 @@
 import id.ac.president.choreco.component.Spectrum;
-import id.ac.president.choreco.component.WAVFile;
+import id.ac.president.choreco.component.sound.SoundFile;
+import id.ac.president.choreco.component.sound.WAVFile;
 import id.ac.president.choreco.system.STFT;
 import id.ac.president.choreco.component.Signal;
 import id.ac.president.choreco.system.exception.STFTException;
@@ -15,16 +16,16 @@ import java.net.URL;
 public class PlotSignalTest {
 
     URL url = getClass().getResource("Voice_058.wav");
-    WAVFile WAVFile;
+    SoundFile WAVFile;
 
 
-    PlotSignalTest() throws SignalException {
+    PlotSignalTest() {
         assert url != null;
         File file = new File(url.getPath());
         WAVFile = new WAVFile(file);
     }
     @Test @Disabled
-    public void testPlot() throws SignalException {
+    public void testPlot() {
 
         Signal signal = WAVFile.getSamples(0);
         signal.setName("Test audio plot");
@@ -67,7 +68,7 @@ public class PlotSignalTest {
         plotManager.waitForClose();
     }
 
-    @Test //@Disabled
+    @Test @Disabled
     public void testSpectrogram() throws STFTException {
         assert url != null;
 

@@ -23,12 +23,10 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
     implementation("com.github.axet:TarsosDSP:2.4")
-    annotationProcessor("com.github.axet:TarsosDSP:2.4")
-
     implementation("org.apache.commons:commons-math3:3.6.1")
-    annotationProcessor("org.apache.commons:commons-math3:3.6.1")
-
     implementation("com.github.yannrichet:JMathPlot:1.0.1")
+    implementation("javazoom:jlayer:1.0.1")
+
     compileOnly ("org.projectlombok:lombok:1.18.22")
     annotationProcessor ("org.projectlombok:lombok:1.18.22")
 
