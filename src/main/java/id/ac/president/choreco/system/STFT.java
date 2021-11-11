@@ -3,6 +3,7 @@ package id.ac.president.choreco.system;
 import be.tarsos.dsp.util.fft.FFT;
 import be.tarsos.dsp.util.fft.HannWindow;
 import id.ac.president.choreco.component.Signal;
+import id.ac.president.choreco.component.SignalFFT;
 import id.ac.president.choreco.component.Spectrum;
 import id.ac.president.choreco.system.exception.STFTException;
 import lombok.Getter;
@@ -10,31 +11,26 @@ import lombok.Getter;
 import java.util.Arrays;
 
 public class STFT {
-    private final float[] signalBuffer; // need to develop to be buffer stream
+//    private final float[] signalBuffer; // need to develop to be buffer stream
     @Getter private final int frameSize;
     @Getter private final int hopSize;
-    @Getter private final float sampleRate;
-    @Getter private final float frequencyResolution;
-    @Getter private final float frequencyResolutionFFT;
 
     private FFT fft;
     private final static HannWindow hannWindow = new HannWindow();
 
 
-    public STFT(Signal buffer, int frameSize, int hopSize, float sampleRate) throws STFTException {
+    public STFT(int frameSize, int hopSize) throws STFTException {
+        this.frameSize = frameSize;
+        this.hopSize = hopSize;
+    }
+
+    public Spectrum process(Signal buffer, float sampleRate) throws STFTException { // Need to developed to be spectrum output buffer
+        fft = new FFT(frameSize);
+        float frequencyResolution = sampleRate / (frameSize * 2);
+        float[] signalBuffer = buffer.getData();
         if (buffer.getDomain() != Signal.Domain.TIME_DOMAIN) {
             throw new STFTException("CONSTRUCT_ERROR", "Time domain expected");
         }
-        this.signalBuffer = buffer.getData();
-        this.frameSize = frameSize;
-        this.hopSize = hopSize;
-        this.sampleRate = sampleRate;
-        this.frequencyResolution = sampleRate / frameSize;
-        this.frequencyResolutionFFT = sampleRate / buffer.getData().length;
-    }
-
-    public Spectrum process() { // Need to developed to be spectrum output buffer
-        fft = new FFT(frameSize);
         int frameTotal = (signalBuffer.length - frameSize) / hopSize + 1;
         int binLength = frameSize / 2;
         float[][] bins = new float[frameTotal][binLength];
@@ -70,28 +66,30 @@ public class STFT {
         }
     }
 
-    public Signal fftPower() {
-        fft = new FFT(signalBuffer.length);
-        float[] tempBuffer = new float[signalBuffer.length * 2];
+    public Signal fftPower(Signal buffer, float sampleRate) {
+        int length = buffer.getData().length;
+        float frequencyResolution = sampleRate / (length * 2);
+        fft = new FFT(length);
+        float[] tempBuffer = new float[length * 2];
 
         System.arraycopy(
-                signalBuffer, 0,
+                buffer.getData(), 0,
             tempBuffer, 0,
-            signalBuffer.length
+            length
         );
 
         fft.complexForwardTransform(tempBuffer);
-        int n = signalBuffer.length;
+        int n = length;
 
         float[] bins = new float[n];
         fft.modulus(tempBuffer, bins);
 
-        return new Signal(
+        return new SignalFFT(
                 "fftPower",
                 Arrays.copyOfRange(bins, 0, (n/2)),
                 sampleRate,
-                Signal.Domain.FREQUENCY_DOMAIN
-                );
+                frequencyResolution,
+                true);
     }
 
 

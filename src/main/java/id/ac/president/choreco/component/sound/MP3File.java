@@ -149,7 +149,7 @@ public class MP3File extends SoundFile {
     }
 
     @Override
-    public void loop(int t) {
+    public void loop(int t) { // still no good
         if (playLatch.getCount() == 1)
             throw new IllegalCallerException("Player has started before");
         loopLatch = new CountDownLatch(t);

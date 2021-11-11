@@ -27,6 +27,7 @@ public class Signal {
     private final float[] data; // need to develop to be buffer stream
     private final float sampleRate;
     private final float totalSecond;
+    protected float frequencyResolution;
 
     public Signal(String labelName, float[] data, float sampleRate, Domain domain)  {
         this.data = data;
@@ -34,6 +35,13 @@ public class Signal {
         this.name = labelName;
         this.sampleRate = sampleRate;
         this.totalSecond = (float)(data.length) / sampleRate;
+        this.frequencyResolution = sampleRate / (data.length * 2); // not accurate, use SignalFFT
+    }
+
+    public float getFrequencyResolution() {
+        if (domain != Domain.FREQUENCY_DOMAIN)
+            throw new IllegalCallerException("Not A frequency domain");
+        return frequencyResolution;
     }
 
     public void plot() {

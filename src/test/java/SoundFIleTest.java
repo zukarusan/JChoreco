@@ -21,7 +21,7 @@ public class SoundFIleTest {
         WAVFile.play();
     }
 
-    @Test// @Disabled
+    @Test @Disabled
     public void createMp3File() {
         URL url = getClass().getResource("major.mp3");
 

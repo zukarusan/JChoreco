@@ -29,11 +29,12 @@ public class Spectrum {
         if (idx >= dataBuffer.length)
             throw new IllegalArgumentException("Out of range index, maximum length: "+
                     String.format("%.2f", dataBuffer.length/frequencyResolution)+" seconds");
-        return new Signal(
+        return new SignalFFT(
                 "SignalAt"+String.format("%.1f",second)+"_"+name,
                 dataBuffer[idx],
                 sampleRate,
-                domain);
+                frequencyResolution,
+                true);
     }
 
 }

@@ -1,6 +1,7 @@
 package id.ac.president.choreco.system;
 
 import id.ac.president.choreco.component.Signal;
+import id.ac.president.choreco.component.SignalFFT;
 import id.ac.president.choreco.component.Spectrum;
 import id.ac.president.choreco.system.exception.STFTException;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
@@ -69,8 +70,7 @@ public class SignalProcessor {
         return freq_res * index;
     }
 
-    public static float[] idxToFreq(int[] indexes, float sampleRate, int dataLength) {
-        float freq_res = sampleRate / (dataLength);
+    public static float[] idxToFreq(int[] indexes, float freq_res) {
         float[] frequencies = new float[indexes.length];
 
         for (int i = 0; i < indexes.length; i++) {
@@ -99,8 +99,7 @@ public class SignalProcessor {
                 "trimmed"+from_freq+"-"+to_freq+"_"+fft_amp_data.getName(),
                 trimmed,
                 fft_amp_data.getSampleRate(),
-                freq_res
-                );
+                freq_res);
     }
 
     public static Signal trimOfRange(Signal fft_amp_data, float from_freq, float to_freq, float freq_res) throws STFTException {
@@ -118,7 +117,15 @@ public class SignalProcessor {
                 trimmed, 0,
                 length
         );
-        return new Signal(
+        if (fft_amp_data instanceof SignalFFT)
+            return new SignalFFT(
+                    "trimmed"+from_freq+"-"+to_freq+"_"+fft_amp_data.getName(),
+                    trimmed,
+                    fft_amp_data.getSampleRate(),
+                    fft_amp_data.getFrequencyResolution(),
+                    ((SignalFFT) fft_amp_data).isNyquist()
+            );
+        else return new Signal(
                 "trimmed"+from_freq+"-"+to_freq+"_"+fft_amp_data.getName(),
                 trimmed,
                 fft_amp_data.getSampleRate(),
