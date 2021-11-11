@@ -1,11 +1,11 @@
-package id.ac.president.choreco.system;
+package com.github.zukarusan.choreco.system;
 
 import be.tarsos.dsp.util.fft.FFT;
 import be.tarsos.dsp.util.fft.HannWindow;
-import id.ac.president.choreco.component.Signal;
-import id.ac.president.choreco.component.SignalFFT;
-import id.ac.president.choreco.component.Spectrum;
-import id.ac.president.choreco.system.exception.STFTException;
+import com.github.zukarusan.choreco.component.Signal;
+import com.github.zukarusan.choreco.component.SignalFFT;
+import com.github.zukarusan.choreco.component.Spectrum;
+import com.github.zukarusan.choreco.system.exception.STFTException;
 import lombok.Getter;
 
 import java.util.Arrays;

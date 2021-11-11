@@ -1,4 +1,4 @@
-package id.ac.president.choreco.system.exception;
+package com.github.zukarusan.choreco.system.exception;
 
 public class SignalProcessorException extends Exception{
     private String code;

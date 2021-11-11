@@ -1,6 +1,6 @@
-package id.ac.president.choreco.component;
+package com.github.zukarusan.choreco.component;
 
-import id.ac.president.choreco.util.PlotManager;
+import com.github.zukarusan.choreco.util.PlotManager;
 import lombok.Getter;
 import lombok.Setter;
 

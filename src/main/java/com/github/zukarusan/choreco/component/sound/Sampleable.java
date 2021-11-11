@@ -1,10 +1,9 @@
-package id.ac.president.choreco.component.sound;
+package com.github.zukarusan.choreco.component.sound;
 
-import id.ac.president.choreco.component.Signal;
-import id.ac.president.choreco.component.exception.SoundException;
+import com.github.zukarusan.choreco.component.Signal;
+import com.github.zukarusan.choreco.component.exception.SoundException;
 
 import javax.sound.sampled.AudioFormat;
-import java.io.File;
 
 public interface Sampleable {
     void extractSamples(byte[] rawSamples, AudioFormat format);

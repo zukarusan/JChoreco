@@ -1,8 +1,7 @@
-package id.ac.president.choreco.component.sound;
+package com.github.zukarusan.choreco.component.sound;
 
-import id.ac.president.choreco.component.exception.SoundException;
+import com.github.zukarusan.choreco.component.exception.SoundException;
 
-import javax.sound.sampled.AudioInputStream;
 import java.io.File;
 
 public interface Playable {

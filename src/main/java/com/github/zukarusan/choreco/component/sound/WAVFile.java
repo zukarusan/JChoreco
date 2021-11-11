@@ -1,6 +1,6 @@
-package id.ac.president.choreco.component.sound;
+package com.github.zukarusan.choreco.component.sound;
 
-import id.ac.president.choreco.component.exception.SoundException;
+import com.github.zukarusan.choreco.component.exception.SoundException;
 import lombok.Getter;
 
 import javax.sound.sampled.*;

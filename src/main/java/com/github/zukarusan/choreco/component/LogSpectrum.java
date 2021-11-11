@@ -1,4 +1,4 @@
-package id.ac.president.choreco.component;
+package com.github.zukarusan.choreco.component;
 
 public class LogSpectrum {
     private LogFrequency logFrequency = LogFrequency.getInstance();

@@ -1,13 +1,12 @@
-package id.ac.president.choreco.component.sound;
+package com.github.zukarusan.choreco.component.sound;
 
-import id.ac.president.choreco.component.exception.SoundException;
+import com.github.zukarusan.choreco.component.exception.SoundException;
 import javazoom.jl.decoder.*;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import javazoom.jl.player.advanced.PlaybackEvent;
 import javazoom.jl.player.advanced.PlaybackListener;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
 import java.io.*;
 import java.util.concurrent.CountDownLatch;
 

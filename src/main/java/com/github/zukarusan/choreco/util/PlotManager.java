@@ -1,4 +1,4 @@
-package id.ac.president.choreco.util;
+package com.github.zukarusan.choreco.util;
 
 import org.math.plot.Plot2DPanel;
 

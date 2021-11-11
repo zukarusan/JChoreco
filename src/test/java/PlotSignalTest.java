@@ -1,13 +1,12 @@
-import id.ac.president.choreco.component.Spectrum;
-import id.ac.president.choreco.component.sound.MP3File;
-import id.ac.president.choreco.component.sound.SoundFile;
-import id.ac.president.choreco.component.sound.WAVFile;
-import id.ac.president.choreco.system.STFT;
-import id.ac.president.choreco.component.Signal;
-import id.ac.president.choreco.system.exception.STFTException;
-import id.ac.president.choreco.component.exception.SignalException;
-import id.ac.president.choreco.system.SignalProcessor;
-import id.ac.president.choreco.util.PlotManager;
+import com.github.zukarusan.choreco.component.Spectrum;
+import com.github.zukarusan.choreco.component.sound.MP3File;
+import com.github.zukarusan.choreco.component.sound.SoundFile;
+import com.github.zukarusan.choreco.component.sound.WAVFile;
+import com.github.zukarusan.choreco.system.STFT;
+import com.github.zukarusan.choreco.component.Signal;
+import com.github.zukarusan.choreco.system.exception.STFTException;
+import com.github.zukarusan.choreco.system.SignalProcessor;
+import com.github.zukarusan.choreco.util.PlotManager;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 

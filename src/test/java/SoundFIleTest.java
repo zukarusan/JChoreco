@@ -1,14 +1,10 @@
-import id.ac.president.choreco.component.exception.SoundException;
-import id.ac.president.choreco.component.sound.MP3File;
-import id.ac.president.choreco.component.sound.SoundFile;
-import id.ac.president.choreco.component.sound.WAVFile;
-import id.ac.president.choreco.component.exception.SignalException;
+import com.github.zukarusan.choreco.component.sound.MP3File;
+import com.github.zukarusan.choreco.component.sound.WAVFile;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.file.Path;
 
 public class SoundFIleTest {
     @Test @Disabled
