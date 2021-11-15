@@ -1,1 +1,1 @@
-A High-Level codes for extracting chroma features... To-develop a chord recognition using chroma vector neural network classification. Include utilities for STFT, Log-Frequency spectrum, and Chroma Features
+A High-Level Java codes for extracting chroma features, eventually chord recognition... To-develop a chord recognition using chroma vector neural network classification. Include utilities for STFT, Log-Frequency spectrum, and Chroma Features
