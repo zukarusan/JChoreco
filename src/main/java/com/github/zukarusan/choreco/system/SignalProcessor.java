@@ -1,8 +1,9 @@
 package com.github.zukarusan.choreco.system;
 
+import com.github.zukarusan.choreco.component.spectrum.FrequencySpectrum;
 import com.github.zukarusan.choreco.component.SignalFFT;
-import com.github.zukarusan.choreco.component.Spectrum;
 import com.github.zukarusan.choreco.component.Signal;
+import com.github.zukarusan.choreco.component.spectrum.Spectrum;
 import com.github.zukarusan.choreco.system.exception.STFTException;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
@@ -81,60 +82,78 @@ public class SignalProcessor {
 
 
     // data input in frequency-domain with amplitudes (not in complex number representation)
-    public static Spectrum trimOfRange(Spectrum fft_amp_data, float from_freq, float to_freq) {
-        float[][] data = fft_amp_data.getDataBuffer();
-        float freq_res = fft_amp_data.getFrequencyResolution();
+    public static FrequencySpectrum trimOfRange(FrequencySpectrum spectrum, float from_freq, float to_freq) {
+        float freq_res = spectrum.getFrequencyResolution();
+        float[][] trimmed = trimOfRange(spectrum.getDataBuffer(), from_freq, to_freq, freq_res);
+        return new FrequencySpectrum(
+                "trimmed"+from_freq+"-"+to_freq+"_"+spectrum.getName(),
+                trimmed,
+                spectrum.getSampleRate(),
+                spectrum.getFrequencyResolution(),
+                ((int) (from_freq / freq_res)) * freq_res);
+    }
+
+    public static float[][] trimOfRange(float[][] fft_amp_data, float from_freq, float to_freq, float freq_res) {
         int idx_from = freqToIdx(from_freq, freq_res);
         int idx_to = freqToIdx(to_freq, freq_res);
         int length = idx_to-idx_from+1;
-        float[][] trimmed = new float[data.length][length];
+        float[][] trimmed = new float[fft_amp_data.length][length];
         for (int i = 0; i < trimmed.length; i ++) {
             System.arraycopy(
-                    data[i], idx_from,
+                    fft_amp_data[i], idx_from,
                     trimmed[i], 0,
                     length
             );
         }
-        return new Spectrum(
-                "trimmed"+from_freq+"-"+to_freq+"_"+fft_amp_data.getName(),
-                trimmed,
-                fft_amp_data.getSampleRate(),
-                freq_res);
+        return trimmed;
     }
 
-    public static Signal trimOfRange(Signal fft_amp_data, float from_freq, float to_freq, float freq_res) throws STFTException {
-        if (fft_amp_data.getDomain() != Signal.Domain.FREQUENCY_DOMAIN) {
+    public static Signal trimOfRange(Signal signal, float from_freq, float to_freq) throws STFTException {
+        if (signal.getDomain() != Signal.Domain.FREQUENCY_DOMAIN) {
             throw new STFTException("SIGNAL_DOMAIN_MISMATCH", "Signal must be in Frequency-domain", new IllegalArgumentException("fft_amp_data not match"));
         }
-        float[] data = fft_amp_data.getData();
+        float freq_res = signal.getFrequencyResolution();
+        float[] trimmed = trimOfRange(signal.getData(), from_freq, to_freq, freq_res);
+        if (signal instanceof SignalFFT)
+            return new SignalFFT(
+                    "trimmed"+from_freq+"-"+to_freq+"_"+signal.getName(),
+                    trimmed,
+                    signal.getSampleRate(),
+                    signal.getFrequencyResolution(),
+                    ((SignalFFT) signal).isNyquist(),
+                    ((int) (from_freq / freq_res)) * freq_res
+            );
+        else return new Signal(
+                "trimmed"+from_freq+"-"+to_freq+"_"+signal.getName(),
+                trimmed,
+                signal.getSampleRate(),
+                Signal.Domain.FREQUENCY_DOMAIN
+        );
+    }
 
+    public static float[] trimOfRange(float[] fft_amp_data, float from_freq, float to_freq, float freq_res){
         int idx_from = (int) (from_freq / freq_res);
         int idx_to = (int) (to_freq / freq_res);
         int length = idx_to-idx_from+1;
         float[] trimmed = new float[length];
         System.arraycopy(
-                data, idx_from,
+                fft_amp_data, idx_from,
                 trimmed, 0,
                 length
         );
-        if (fft_amp_data instanceof SignalFFT)
-            return new SignalFFT(
-                    "trimmed"+from_freq+"-"+to_freq+"_"+fft_amp_data.getName(),
-                    trimmed,
-                    fft_amp_data.getSampleRate(),
-                    fft_amp_data.getFrequencyResolution(),
-                    ((SignalFFT) fft_amp_data).isNyquist()
-            );
-        else return new Signal(
-                "trimmed"+from_freq+"-"+to_freq+"_"+fft_amp_data.getName(),
-                trimmed,
-                fft_amp_data.getSampleRate(),
-                Signal.Domain.FREQUENCY_DOMAIN
-                );
+        return trimmed;
     }
 
-    public static void normalize(Spectrum spectrum) {
-        float[][] data = spectrum.getDataBuffer();
+
+    public static void normalizeEuclid(float[][] data) {
+//        float[][]
+    }
+
+    public static void normalizeZeroOne(Spectrum spectrum) {
+        normalizeZeroOne(spectrum.getDataBuffer());
+    }
+
+    public static void normalizeZeroOne(float[][] data) {
         int frameTotal = data.length;
         int n = data[0].length;
         float maxAmp = data[0][0], minAmp = maxAmp;
@@ -160,8 +179,11 @@ public class SignalProcessor {
         }
     }
 
-    public static void normalize(Signal signal) {
-        float[] data = signal.getData();
+    public static void normalizeZeroOne(Signal signal) {
+        normalizeZeroOne(signal.getData());
+    }
+
+    public static void normalizeZeroOne(float[] data) {
         float maxAmp = data[0], minAmp = maxAmp;
 
         for (int i = 0; i + 1 < data.length; i++) {
@@ -178,7 +200,10 @@ public class SignalProcessor {
     }
 
     public static void powerToDb(Spectrum spectrum) {
-        float[][] data = spectrum.getDataBuffer();
+        powerToDb(spectrum.getDataBuffer());
+    }
+
+    public static void powerToDb(float[][] data) {
         int frameTotal = data.length;
         int n = data[0].length;
         for (int i = 0; i < frameTotal; i++) {
@@ -191,7 +216,11 @@ public class SignalProcessor {
     }
 
     public static void powerToDb(Signal signal) {
-        float[] data = signal.getData();
+        powerToDb(signal.getData());
+    }
+
+
+    public static void powerToDb(float[] data) {
         for (int i = 0; i < data.length; i++) {
             data[i] = (float) (10 * Math.log10(data[i]));
         }

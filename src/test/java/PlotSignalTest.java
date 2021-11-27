@@ -1,7 +1,15 @@
-import com.github.zukarusan.choreco.component.Spectrum;
+import com.github.zukarusan.choreco.component.LogFrequencyVector;
+import com.github.zukarusan.choreco.component.SignalFFT;
+import com.github.zukarusan.choreco.component.chroma.CP;
+import com.github.zukarusan.choreco.component.chroma.ChromaVector;
+import com.github.zukarusan.choreco.component.spectrum.chroma.CLPSpectrum;
+import com.github.zukarusan.choreco.component.spectrum.chroma.CPSpectrum;
+import com.github.zukarusan.choreco.component.spectrum.chroma.ChromaSpectrum;
+import com.github.zukarusan.choreco.component.spectrum.FrequencySpectrum;
 import com.github.zukarusan.choreco.component.sound.MP3File;
 import com.github.zukarusan.choreco.component.sound.SoundFile;
 import com.github.zukarusan.choreco.component.sound.WAVFile;
+import com.github.zukarusan.choreco.component.spectrum.LogFrequencySpectrum;
 import com.github.zukarusan.choreco.system.STFT;
 import com.github.zukarusan.choreco.component.Signal;
 import com.github.zukarusan.choreco.system.exception.STFTException;
@@ -43,7 +51,7 @@ public class PlotSignalTest {
         PlotManager.getInstance().waitForClose();
     }
 
-    @Test //@Disabled
+    @Test @Disabled
     public void testFFTPlot() throws STFTException {
         assert url1 != null;
         Signal signal = MP3File.getSamples(0);
@@ -55,8 +63,8 @@ public class PlotSignalTest {
         int length = signal.getData().length;
 
 //        SignalProcessor.powerToDb(signalFFT);
-        SignalProcessor.normalize(signalFFT);
-        signalFFT = SignalProcessor.trimOfRange(signalFFT, 0, 5000, signalFFT.getFrequencyResolution());
+        SignalProcessor.normalizeZeroOne(signalFFT.getData());
+        signalFFT = SignalProcessor.trimOfRange(signalFFT, 0, 5000);
         int[] peaks = SignalProcessor.peakDetection(signalFFT.getData(), 4.3f);
         float[] freq_peaks = SignalProcessor.idxToFreq(peaks, signalFFT.getFrequencyResolution());
 
@@ -81,9 +89,10 @@ public class PlotSignalTest {
 
         STFT stft = new STFT(1024, 512);
         PlotManager plotManager= PlotManager.getInstance();
-        Spectrum spectrum = stft.process(mp3Signal, mp3Signal.getSampleRate());
+
+        FrequencySpectrum spectrum = stft.process(mp3Signal, mp3Signal.getSampleRate());
         SignalProcessor.powerToDb(spectrum);
-        SignalProcessor.normalize(spectrum);
+        SignalProcessor.normalizeZeroOne(spectrum);
 //        spectrum = SignalProcessor.trimOfRange(spectrum, 100, 5000, sound.getSampleRate());
 
 //        for (float[] d : spectrum) {
@@ -93,5 +102,46 @@ public class PlotSignalTest {
 //        }
         plotManager.createSpectrogram(signal.getName(), spectrum.getDataBuffer());
         plotManager.waitForClose();
+    }
+
+    @Test @Disabled
+    public void testLogSpectrum() throws STFTException {
+        Signal signal = MP3File.getSamples(0);
+        STFT stft = new STFT(1024, 512);
+        LogFrequencySpectrum logFSpectrum = new LogFrequencySpectrum(
+                stft.process(signal, signal.getSampleRate())
+        );
+        logFSpectrum.plot();
+        PlotManager.getInstance().waitForClose();
+    }
+
+    @Test @Disabled
+    public void testLogVector() throws STFTException {
+        Signal signal = MP3File.getSamples(0);
+        STFT stft = new STFT(1024, 512);
+        SignalFFT signalFFT = stft.fftPower(signal, signal.getSampleRate());
+        LogFrequencyVector vector = new LogFrequencyVector(signalFFT);
+        vector.plot();
+        PlotManager.getInstance().waitForClose();
+    }
+
+    @Test @Disabled
+    public void testSignalSpectrum() throws STFTException {
+        Signal signal = MP3File.getSamples(0);
+        STFT stft = new STFT(1024, 512);
+        SignalFFT signalFFT = stft.process(signal, signal.getSampleRate()).getSignalAt(0.3f);
+        signalFFT.plot();
+        PlotManager.getInstance().waitForClose();
+    }
+
+    @Test
+    public void testChroma() throws STFTException {
+        Signal signal = MP3File.getSamples(0);
+        STFT stft = new STFT(1024, 512);
+        ChromaSpectrum chroma = new CLPSpectrum(
+                new LogFrequencySpectrum(stft.process(signal, signal.getSampleRate())),
+                50);
+        chroma.plot();
+        PlotManager.getInstance().waitForClose();
     }
 }

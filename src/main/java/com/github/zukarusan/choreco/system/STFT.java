@@ -4,7 +4,7 @@ import be.tarsos.dsp.util.fft.FFT;
 import be.tarsos.dsp.util.fft.HannWindow;
 import com.github.zukarusan.choreco.component.Signal;
 import com.github.zukarusan.choreco.component.SignalFFT;
-import com.github.zukarusan.choreco.component.Spectrum;
+import com.github.zukarusan.choreco.component.spectrum.FrequencySpectrum;
 import com.github.zukarusan.choreco.system.exception.STFTException;
 import lombok.Getter;
 
@@ -19,12 +19,12 @@ public class STFT {
     private final static HannWindow hannWindow = new HannWindow();
 
 
-    public STFT(int frameSize, int hopSize) throws STFTException {
+    public STFT(int frameSize, int hopSize) {
         this.frameSize = frameSize;
         this.hopSize = hopSize;
     }
 
-    public Spectrum process(Signal buffer, float sampleRate) throws STFTException { // Need to developed to be spectrum output buffer
+    public FrequencySpectrum process(Signal buffer, float sampleRate) throws STFTException { // Need to developed to be spectrum output buffer
         fft = new FFT(frameSize);
         float frequencyResolution = sampleRate / (frameSize * 2);
         float[] signalBuffer = buffer.getData();
@@ -39,7 +39,7 @@ public class STFT {
             // copy frames to process
             frames = new float[frameSize * 2];
             System.arraycopy(
-                    signalBuffer, hop,
+                signalBuffer, hop,
                 frames, 0,
                 frameSize
             );
@@ -56,7 +56,7 @@ public class STFT {
             }
 
         }
-        return new Spectrum("stftFrame"+frameSize, bins, sampleRate, frequencyResolution);
+        return new FrequencySpectrum("stftFrame"+frameSize, bins, sampleRate, frequencyResolution, 0);
     }
 
     private static void windowFunc(float[] data) {
@@ -66,7 +66,7 @@ public class STFT {
         }
     }
 
-    public Signal fftPower(Signal buffer, float sampleRate) {
+    public SignalFFT fftPower(Signal buffer, float sampleRate) {
         int length = buffer.getData().length;
         float frequencyResolution = sampleRate / (length * 2);
         fft = new FFT(length);
@@ -89,7 +89,8 @@ public class STFT {
                 Arrays.copyOfRange(bins, 0, (n/2)),
                 sampleRate,
                 frequencyResolution,
-                true);
+                true,
+                0);
     }
 
 

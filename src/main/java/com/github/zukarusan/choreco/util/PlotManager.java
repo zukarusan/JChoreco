@@ -13,7 +13,7 @@ import static javax.swing.UIManager.getColor;
 
 public class PlotManager {
     private static volatile PlotManager instance;
-    private static final int WIDTH= 1280, HEIGHT= 720;
+    public static final int WIDTH= 1920, HEIGHT= 1080;
     private final Phaser closePhaser;
 
     public static PlotManager getInstance() {
