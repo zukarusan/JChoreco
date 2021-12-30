@@ -1,14 +1,12 @@
 package com.github.zukarusan.choreco.component.spectrum.chroma;
 
-import com.github.zukarusan.choreco.component.LogFrequencyVector;
 import com.github.zukarusan.choreco.component.chroma.Chroma;
 import com.github.zukarusan.choreco.component.LogFrequency;
 import com.github.zukarusan.choreco.component.chroma.ChromaVector;
 import com.github.zukarusan.choreco.component.spectrum.LogFrequencySpectrum;
 import com.github.zukarusan.choreco.component.spectrum.Spectrum;
-import com.github.zukarusan.choreco.system.SignalProcessor;
+import com.github.zukarusan.choreco.system.CommonProcessor;
 import com.github.zukarusan.choreco.util.PlotManager;
-import com.github.zukarusan.choreco.util.VectorUtils;
 
 import java.util.Arrays;
 
@@ -33,7 +31,7 @@ public abstract class ChromaSpectrum extends Spectrum {
 
     public void plot() {
         PlotManager plotManager = PlotManager.getInstance();
-        int size = (int) ((PlotManager.HEIGHT - PlotManager.HEIGHT * 0.1) / (frameLength));
+        int size = (int) ((PlotManager.HEIGHT / 2 - PlotManager.HEIGHT / 2 * 0.1) / (frameLength));
         float[][] copy = new float[frameTotal][size * frameLength];
         for (int i = 0; i < frameTotal; i++) {
             for (int j = 0, k = 0; j < frameLength; j++, k+=size) {
@@ -41,7 +39,7 @@ public abstract class ChromaSpectrum extends Spectrum {
             }
         }
 //        SignalProcessor.powerToDb(copy);
-        SignalProcessor.normalizeZeroOne(copy);
+        CommonProcessor.normalizeZeroOne(copy);
         plotManager.createSpectrogram(name, copy);
     }
 }

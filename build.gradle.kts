@@ -26,6 +26,7 @@ dependencies {
     implementation("org.apache.commons:commons-math3:3.6.1")
     implementation("com.github.yannrichet:JMathPlot:1.0.1")
     implementation("javazoom:jlayer:1.0.1")
+    implementation("com.github.wendykierp:JTransforms:3.1")
 
     compileOnly ("org.projectlombok:lombok:1.18.22")
     annotationProcessor ("org.projectlombok:lombok:1.18.22")

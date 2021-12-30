@@ -70,6 +70,28 @@ public  class LogFrequency {
 //                        ? (insertionPoint-1)/2 : insertionPoint/2; }
     }
 
+    public static int[] createFrequencyMap(int fft_size, float sample_rate) {
+        int length = fft_size/2+1;
+        int[] maps = new int[length];
+        final float midi_0 = (float) (REFERENCE_FREQUENCY * Math.pow(2, -69/12f));
+        float freq_res = sample_rate / fft_size;
+
+        float f = 0;
+        int i = 0;
+        for ( ; f < midi_0; ++i, f+=freq_res) {
+            if (i > length) throw new IllegalStateException("fft size too small");
+            maps[i] = 0;
+        }
+
+        for ( ; i < length; ++i, f+=freq_res) {
+            maps[i] = (int) Math.round((Math.log(f/REFERENCE_FREQUENCY) / Math.log(2) * 12f + 69));
+            if (maps[i] > 127)
+                maps[i] = 127;
+        }
+
+        return maps;
+    }
+
 //    public LogFrequency reset(float reference_pitch) {
 //        synchronized (PlotManager.class) {
 //            instance = null;

@@ -5,15 +5,64 @@ import com.github.zukarusan.choreco.component.SignalFFT;
 import com.github.zukarusan.choreco.component.Signal;
 import com.github.zukarusan.choreco.component.spectrum.Spectrum;
 import com.github.zukarusan.choreco.system.exception.STFTException;
+import com.github.zukarusan.choreco.util.VectorUtils;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
+import be.tarsos.dsp.beatroot.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class SignalProcessor {
+public class CommonProcessor {
 
-    public static int[] peakDetection(float[] data, float threshold) {
+    public static void harmonicPeakSubtract(float[][] bins, float freqRes, int harmonic_size) {
+        int len = bins.length;
+        int len_frame = bins[0].length;
+        for (int i = 0; i < len; i++) {
+            int H = harmonic_size;
+            for (int j = 1; j < len_frame; j++) { // discard 0Hz
+                if (j * H >= len_frame) H = len_frame/j - 1;
+                float sum = 0;
+                for (int h = 0, hf = j; h < H; h++, hf+=j) {
+                    sum += bins[i][hf] -
+                            Math.max(a(bins[i], j, H), Math.max(b(bins[i], j), g(bins[i], j)));
+                }
+                bins[i][j] = sum;
+            }
+        }
+    }
+
+    /*** Penalize even harmonic ***/
+    public static float a(final float[] bin, int freq_idx, int harmonic_size) {
+        float sum = 0;
+        float idx = (0.5f) * freq_idx;
+        for (int h = 0; h < harmonic_size; h++, idx += freq_idx) {
+            sum += bin[Math.round(idx)];
+        }
+        return sum;
+    }
+    /*** Penalize third harmonic ***/
+    final static float[] h3rd = {1/3f, 2/3f, 4/3f, 5/3f};
+    public static float b(final float[] bin, int freq_idx) {
+        float min = bin[Math.round(h3rd[0] * freq_idx)];
+        for (int h = 1; h < h3rd.length; h++) {
+            int i = Math.round(h3rd[h] * freq_idx);
+            if (i >= bin.length) break;
+            min = Math.min(min, bin[i]);
+        }
+        return min;
+    }
+    /*** Penalize fifth harmonic ***/
+    final static float[] h5th = {1/5f, 2/5f, 3/5f, 4/5f};
+    public static float g(final float[] bin, int freq_idx) {
+        float min = bin[Math.round(h5th[0] * freq_idx)];
+        for (int h = 1; h < h5th.length; h++) {
+            min = Math.min(min, bin[Math.round(h5th[h] * freq_idx)]);
+        }
+        return min;
+    }
+
+    public static int[] findPeaksByAverage(float[] data, float threshold) {
 
         // init stats instance
         SummaryStatistics stats = new SummaryStatistics();
@@ -31,27 +80,79 @@ public class SignalProcessor {
 
         // loop input
         for (int i = 0; i < data.length; i++) {
-
             // if the distance between the current value and average is enough standard deviations (threshold) away
-            if (Math.abs(data[i] - avg) > threshold * std) {
-
+            if (Math.abs(data[i] - avg) > threshold * std)
                 peaks.add(i);
-                //peaks[i] = 1;
-                // this is a signal (i.e. peak), determine if it is a positive or negative signal
+        }
+        return peaks.stream().mapToInt(i -> i).toArray();
+    }
+
+//            if (Math.abs(data[i] - avg) > threshold * std) {
+//
+//                peaks.add(i);
+//                peaks[i] = 1;
+//                 this is a signal (i.e. peak), determine if it is a positive or negative signal
 //                if (data[i] > avg) {
 //                    peaks[i]    = 1;
 //                } else {
 //                    peaks[i] = -1;
 //                }
-
-            }
+//
+//            }
 //            else {
 //                // ensure this signal remains a zero
 //                peaks[i] = 0;
 //            }
+
+/*
+
+    public static int[] tarsosPeakFinder(float[] data, float threshold, int minWidth) {
+        double[] d_data = new double[data.length];
+        SummaryStatistics stats = new SummaryStatistics();
+
+        for (int i = 0; i < d_data.length; i++) {
+            d_data[i] = data[i];
+            stats.addValue(data[i]);
         }
 
-        return peaks.stream().mapToInt(i -> i).toArray();
+        float avg = (float) stats.getMean();
+        stats.clear();
+        return Peaks.findPeaks(d_data, minWidth, avg * threshold).stream().mapToInt(i -> i).toArray();
+    }
+*/
+
+    public static int findPeaksByExtremePoints(float[] data, int[] peaks, int width) {
+        int peakCount = 0;
+        int maxp = 0;
+        int mid = 0;
+        int end = data.length;
+        while (mid < end) {
+            int i = mid - width;
+            if (i < 0)
+                i = 0;
+            int stop = mid + width + 1;
+            if (stop > data.length)
+                stop = data.length;
+            maxp = i;
+            for (i++; i < stop; i++)
+                if (data[i] > data[maxp])
+                    maxp = i;
+            if (maxp == mid) {
+                int j;
+                for (j = peakCount; j > 0; j--) {
+                    if (data[maxp] <= data[peaks[j-1]])
+                        break;
+                    else if (j < peaks.length)
+                        peaks[j] = peaks[j-1];
+                }
+                if (j != peaks.length)
+                    peaks[j] = maxp;
+                if (peakCount != peaks.length)
+                    peakCount++;
+            }
+            mid++;
+        }
+        return peakCount;
     }
 
     public static int freqToIdx(float frequency, float freq_res) {
@@ -215,15 +316,49 @@ public class SignalProcessor {
         }
     }
 
+    public static float[] avgSubtract(Signal signal) {
+        return avgSubtract(signal.getData());
+    }
+
+
+    public static float[] avgSubtract(float[] signal) {
+        SummaryStatistics stat = new SummaryStatistics();
+        for (float s : signal) {
+            stat.addValue(s);
+        }
+        float avg = (float) stat.getMean();
+        float[] out = new float[signal.length];
+        for (int i = 0; i < signal.length; i++) {
+            out[i] = signal[i] - avg;
+        }
+        return out;
+    }
+
     public static void powerToDb(Signal signal) {
         powerToDb(signal.getData());
     }
-
 
     public static void powerToDb(float[] data) {
         for (int i = 0; i < data.length; i++) {
             data[i] = (float) (10 * Math.log10(data[i]));
         }
     }
+
+    public static void logCompress(float[] data, double constant) {
+        VectorUtils.mapFunc(data, (j) -> j * constant + 1);
+        VectorUtils.mapFunc(data, Math::log);
+    }
+
+    public static void logCompress(Spectrum spectrum, double constant) { logCompress(spectrum.getDataBuffer(), constant); }
+
+    public static void logCompress(final float[][] data, double constant) {
+        int len_i = data.length, len_j = data[0].length;
+        for (int i = 0; i < len_i; i++) {
+            for (int j = 0; j < len_j; j++) {
+                data[i][j] = (float) Math.log(data[i][j] * constant + 1);
+            }
+        }
+    }
+
 
 }

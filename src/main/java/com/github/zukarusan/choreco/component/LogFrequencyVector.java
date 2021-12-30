@@ -1,12 +1,12 @@
 package com.github.zukarusan.choreco.component;
 
-import com.github.zukarusan.choreco.system.SignalProcessor;
+import com.github.zukarusan.choreco.system.CommonProcessor;
 import com.github.zukarusan.choreco.util.PlotManager;
 import lombok.Getter;
 
 public class LogFrequencyVector {
-    @Getter private float[] power;
-    public static final float PEAK_THRESHOLD = 5f;
+    @Getter private final float[] power;
+    public static final float PEAK_THRESHOLD = 3f;
 
     public LogFrequencyVector(float[] pitches_power) {
         if (pitches_power.length != LogFrequency.PITCH_LENGTH) {
@@ -21,11 +21,14 @@ public class LogFrequencyVector {
         float frequencyResolution = signal.frequencyResolution;
 
         if (signal.getOffset() < 25f){
-            trimmed = SignalProcessor.trimOfRange(signal.getData(), 25f, 5000f, frequencyResolution);
+            trimmed = CommonProcessor.trimOfRange(signal.getData(), 25f, 5000f, frequencyResolution);
             offset = ((int) (25f / frequencyResolution)) * frequencyResolution;
         }
         power = new float[LogFrequency.PITCH_LENGTH];
-        int[] peaks = SignalProcessor.peakDetection(trimmed, PEAK_THRESHOLD);
+
+        int[] peaks = CommonProcessor.findPeaksByAverage(trimmed, PEAK_THRESHOLD);
+//        int[] peaks = new int[6]; // pick 6 highest frequency peaks
+//        int found = SignalProcessor.tarsosPeakFinder(trimmed, peaks);
         int pitch = 0, total = 0;
         float sum = 0;
         for (int peak : peaks) {
@@ -37,7 +40,7 @@ public class LogFrequencyVector {
                 continue;
             }
 
-            if (total!=0) this.power[pitch] = sum / total;
+            if (total != 0) this.power[pitch] = sum / total;
             pitch = logFrequency.searchPitch(freq, pitch);
             total = 1;
             sum = trimmed[peak];

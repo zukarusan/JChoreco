@@ -1,33 +1,45 @@
 package com.github.zukarusan.choreco.system;
 
-import be.tarsos.dsp.util.fft.FFT;
-import be.tarsos.dsp.util.fft.HannWindow;
+import be.tarsos.dsp.util.fft.*;
 import com.github.zukarusan.choreco.component.Signal;
 import com.github.zukarusan.choreco.component.SignalFFT;
 import com.github.zukarusan.choreco.component.spectrum.FrequencySpectrum;
 import com.github.zukarusan.choreco.system.exception.STFTException;
 import lombok.Getter;
+import org.jtransforms.fft.FloatFFT_1D;
 
 import java.util.Arrays;
+
+
 
 public class STFT {
 //    private final float[] signalBuffer; // need to develop to be buffer stream
     @Getter private final int frameSize;
     @Getter private final int hopSize;
 
-    private FFT fft;
-    private final static HannWindow hannWindow = new HannWindow();
+    public static enum WINDOW {
+        Cosine,
+        Gauss,
+        Hamming,
+        Hann,
+        Rectangular,
+        Triangular
+    }
 
+    private final FloatFFT_1D fft;
+    private final float[] window_data;
 
     public STFT(int frameSize, int hopSize) {
         this.frameSize = frameSize;
         this.hopSize = hopSize;
+        window_data = createWindowCurve(WINDOW.Hamming, frameSize);
+        fft = new FloatFFT_1D(frameSize);
     }
 
     public FrequencySpectrum process(Signal buffer, float sampleRate) throws STFTException { // Need to developed to be spectrum output buffer
-        fft = new FFT(frameSize);
-        float frequencyResolution = sampleRate / (frameSize * 2);
-        float[] signalBuffer = buffer.getData();
+        float frequencyResolution = sampleRate / (frameSize);
+        float[] signalBuffer = CommonProcessor.avgSubtract(buffer);
+
         if (buffer.getDomain() != Signal.Domain.TIME_DOMAIN) {
             throw new STFTException("CONSTRUCT_ERROR", "Time domain expected");
         }
@@ -44,49 +56,89 @@ public class STFT {
                 frameSize
             );
 
-            // Multiply by Hann window function
+            // Multiply by Hamming window function
             windowFunc(frames);
-            fft.complexForwardTransform(frames);
-            fft.modulus(
-                Arrays.copyOfRange(frames, 0, frameSize),
-                bins[i]);
+            fft.realForward(frames);
+            modulus(frames, bins[i]);
 
-            for (int j = 0; j < binLength; j++) {
-                bins[i][j] /= sampleRate;
-            }
+//            for (int j = 0; j < binLength; j++) {
+//                bins[i][j] /= sampleRate;
+//            }
 
         }
         return new FrequencySpectrum("stftFrame"+frameSize, bins, sampleRate, frequencyResolution, 0);
     }
 
-    private static void windowFunc(float[] data) {
-        float[] windows = hannWindow.generateCurve(data.length);
+    public static void modulus(float[] complex_data, float[] output_amplitudes) {
+        if (output_amplitudes.length > complex_data.length/2)
+            throw new IllegalArgumentException("Output length must not greater than complex_data length / 2");
+        for(int i = 0, j = 0; i < output_amplitudes.length; ++i, ++j) {
+            float real = complex_data[j];
+            float imaginary = complex_data[++j];
+            output_amplitudes[i] = (float) Math.sqrt(real*real + imaginary*imaginary);
+        }
+    }
+
+    public static float[] createWindowCurve(WINDOW type, int size) {
+        WindowFunction wFunc;
+        switch (type) {
+            case Cosine:
+                wFunc = new CosineWindow();
+                break;
+            case Gauss:
+                wFunc = new GaussWindow();
+                break;
+            case Hamming:
+                wFunc = new HammingWindow();
+                break;
+            case Hann:
+                wFunc = new HannWindow();
+                break;
+            case Rectangular:
+                wFunc = new RectangularWindow();
+                break;
+            case Triangular:
+                wFunc = new TriangularWindow();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected window type" + type);
+        }
+        return wFunc.generateCurve(size);
+    }
+
+    public void windowFunc(float[] data) {
+        for (int i = 0; i < frameSize; i++) {
+            data[i] = data[i] * window_data[i];
+        }
+    }
+
+    public static void windowFunc(float[] data, WINDOW type) {
+        float[] windows = createWindowCurve(type, data.length);
         for (int i = 0; i < data.length; i++) {
             data[i] = data[i] * windows[i];
         }
     }
 
-    public SignalFFT fftPower(Signal buffer, float sampleRate) {
+    public static SignalFFT fftPower(Signal buffer, float sampleRate) {
         int length = buffer.getData().length;
-        float frequencyResolution = sampleRate / (length * 2);
-        fft = new FFT(length);
+        float frequencyResolution = sampleRate / (length);
+        FloatFFT_1D fft = new FloatFFT_1D(length);
         float[] tempBuffer = new float[length * 2];
 
         System.arraycopy(
-                buffer.getData(), 0,
+            buffer.getData(), 0,
             tempBuffer, 0,
             length
         );
 
-        fft.complexForwardTransform(tempBuffer);
-        int n = length;
+        fft.realForward(tempBuffer);
 
-        float[] bins = new float[n];
-        fft.modulus(tempBuffer, bins);
+        float[] bins = new float[length];
+        modulus(tempBuffer, bins);
 
         return new SignalFFT(
                 "fftPower",
-                Arrays.copyOfRange(bins, 0, (n/2)),
+                Arrays.copyOfRange(bins, 0, (length /2)),
                 sampleRate,
                 frequencyResolution,
                 true,

@@ -1,8 +1,7 @@
 package com.github.zukarusan.choreco.component.spectrum;
 
-import com.github.zukarusan.choreco.component.Signal;
 import com.github.zukarusan.choreco.component.SignalFFT;
-import com.github.zukarusan.choreco.system.SignalProcessor;
+import com.github.zukarusan.choreco.system.CommonProcessor;
 import com.github.zukarusan.choreco.util.PlotManager;
 import lombok.Getter;
 
@@ -46,7 +45,7 @@ public class FrequencySpectrum extends Spectrum {
     public void plot() {
         PlotManager plotManager = PlotManager.getInstance();
         float[][] copy = Arrays.copyOf(dataBuffer, dataBuffer.length);
-        SignalProcessor.normalizeZeroOne(copy);
+        CommonProcessor.normalizeZeroOne(copy);
         plotManager.createSpectrogram(name, copy);
     }
 

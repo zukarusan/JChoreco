@@ -14,7 +14,8 @@ public class VectorUtils {
 
     public static void normalizeVector(float[] vector) {
         double length = euclidDistance(vector);
-        if (length == 0) return;//throw new IllegalStateException("Euclid distance cannot be 0 to normalize");
+        if (length == 0)
+            return;//throw new IllegalStateException("Euclid distance cannot be 0 to normalize");
         for (int i = 0; i < vector.length; i++) {
             vector[i] /= length;
         }

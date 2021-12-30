@@ -3,15 +3,15 @@ package com.github.zukarusan.choreco.component.spectrum;
 import com.github.zukarusan.choreco.component.LogFrequency;
 import com.github.zukarusan.choreco.component.LogFrequencyVector;
 import com.github.zukarusan.choreco.component.Signal;
-import com.github.zukarusan.choreco.system.SignalProcessor;
+import com.github.zukarusan.choreco.system.CommonProcessor;
 import com.github.zukarusan.choreco.util.PlotManager;
-import lombok.Getter;
 
 import java.util.Arrays;
 
 public class LogFrequencySpectrum extends Spectrum{
 
-    public static final float PEAK_THRESHOLD = 4f;
+    public static final float PEAK_THRESHOLD =2.5f;
+    public static final int HARMONIC_SIZE = 12;
 
     protected final Signal.Domain domain = Signal.Domain.FREQUENCY_DOMAIN;
 
@@ -23,29 +23,53 @@ public class LogFrequencySpectrum extends Spectrum{
         float[][] trimmed = fft_data;
         float offset = spectrum.getOffset();
         if (offset < 25f){
-            trimmed = SignalProcessor.trimOfRange(fft_data, 25f, 5000f, frequencyResolution);
+            trimmed = CommonProcessor.trimOfRange(fft_data, 25f, 5000f, frequencyResolution);
             offset = ((int) (25f / frequencyResolution)) * frequencyResolution;
         }
+
         float[][] logBuffer = new float[fft_data.length][LogFrequency.PITCH_LENGTH];
+
+        int[] fMaps = LogFrequency.createFrequencyMap(fft_data[0].length * 2, spectrum.sampleRate);
+        int off_idx = CommonProcessor.freqToIdx(offset, frequencyResolution);
         for (int i = 0; i < fft_data.length; i++) {
-            int[] peaks = SignalProcessor.peakDetection(trimmed[i], PEAK_THRESHOLD);
+            int[] peaks = new int[8]; // pick 8 highest frequency peaks
+            int found = CommonProcessor.findPeaksByExtremePoints(trimmed[i], peaks, 4);
+//            int[] peaks = CommonProcessor.findPeaksByAverage(trimmed[i], PEAK_THRESHOLD);
+            int total = 1;
+            for (int j = 0; j < found; j++) {
+                int f_idx = off_idx + peaks[j];
+                int l_idx = fMaps[f_idx];
+                logBuffer[i][l_idx] += fft_data[i][f_idx];
+                if (j+1 < found) {
+                    if (peaks[j] != peaks[j+1]) {
+                        logBuffer[i][l_idx] /= total;
+                        total = 1;
+                    } else total++;
+                } else logBuffer[i][l_idx] /= total;
+            }
+        }
+
+        /*for (int i = 0; i < fft_data.length; i++) {
+//            int[] peaks = SignalProcessor.findPeaksByAverage(trimmed[i], PEAK_THRESHOLD);
+            int[] peaks = new int[8]; // pick 6 highest frequency peaks
+            int found = SignalProcessor.findPeaksByExtremePoints(trimmed[i], peaks, 4);
             int pitch = 0, total = 0;
             float sum = 0;
-            for (int peak : peaks) {
-                float freq = peak * frequencyResolution + offset;
+            for (int j = 0; j < found; j++) {
+                float freq = peaks[j] * frequencyResolution + offset;
                 LogFrequency logFrequency = LogFrequency.getInstance();
                 if (logFrequency.checkFreq(freq, pitch)) {
-                    sum += trimmed[i][peak];
+                    sum += trimmed[i][peaks[j]];
                     total++;
                     continue;
                 }
 
-                if (total!=0) logBuffer[i][pitch] = sum / total;
+                if (total != 0) logBuffer[i][pitch] = sum / total;
                 pitch = logFrequency.searchPitch(freq, pitch);
                 total = 1;
-                sum = trimmed[i][peak];
+                sum = trimmed[i][peaks[j]];
             }
-        }
+        }*/
 
         this.dataBuffer = logBuffer;
         this.frameTotal = fft_data.length;
@@ -71,7 +95,7 @@ public class LogFrequencySpectrum extends Spectrum{
             }
         }
 //        SignalProcessor.powerToDb(copy);
-        SignalProcessor.normalizeZeroOne(copy);
+        CommonProcessor.normalizeZeroOne(copy);
         plotManager.createSpectrogram(name, copy);
     }
 

@@ -58,13 +58,15 @@ public class PlotManager {
             nX = normalized_data.length;
 
         BufferedImage specImg = new BufferedImage(
+//                WIDTH,
                 nX,
                 nY,
                 BufferedImage.TYPE_INT_RGB);
 
         float ratio;
-        for(int x = 0; x<nX; x++){
-            for(int y = 0; y<nY; y++){
+//        int scale = (WIDTH / nX );
+        for(int x = 0/*, stretch = 0*/; x<nX; x++/*, stretch+=scale*/){
+            for(int y = 0, h = nY-1; y<nY; y++, h--){
                 ratio = normalized_data[x][y];
 
                 Color newColor = Color.getHSBColor(
@@ -72,16 +74,22 @@ public class PlotManager {
                         1,
                         ratio
                 );
-                specImg.setRGB(x, y, newColor.getRGB());
+//                if (scale != 0) {
+//                    for (int i = 0; i < scale; i++ ) {
+//                        specImg.setRGB(stretch+i, h, newColor.getRGB());
+//                    }
+//                }
+//                else
+                    specImg.setRGB(x, h, newColor.getRGB());
 
             }
         }
-
+        Image fitImg = specImg.getScaledInstance(WIDTH, HEIGHT/2, Image.SCALE_SMOOTH);
         JPanel spectrogram = new JPanel(){
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                g.drawImage(specImg, 0, 0, this);
+                g.drawImage(fitImg, 0, 0, this);
             }
         };
         createFrame(name, spectrogram);
