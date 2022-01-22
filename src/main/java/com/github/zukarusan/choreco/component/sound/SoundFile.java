@@ -23,7 +23,7 @@ public abstract class SoundFile implements Sampleable, Playable {
 
     protected long dataSize;
     protected int totalSamples; // including all channel
-    protected float totalSecond;
+    protected double totalSecond;
 
     public SoundFile(String name) {
         this.name = name;
@@ -53,7 +53,7 @@ public abstract class SoundFile implements Sampleable, Playable {
         int totalChunks = dataSize / chunkSize;
 
         this.totalSamples = totalChunks * channelNums;
-        this.totalSecond =  (float)(totalSamples) / audioFormat.getSampleRate() / channelNums;
+        this.totalSecond =  (double) (totalSamples) / audioFormat.getSampleRate() / channelNums;
 
         float[] channelsOfSamples = new float[totalSamples];
 
@@ -72,8 +72,11 @@ public abstract class SoundFile implements Sampleable, Playable {
                         sampleByte[2] = rawSamples[kIndex + jIndex];
                         sampleByte[3] = rawSamples[kIndex + jIndex + 1];
                         break;
+                    case 4:
+                        for (int _i = kIndex+jIndex, i=0; i < 4; i++, _i++) sampleByte[i] = rawSamples[_i];
+                        break;
                     default:
-                        throw new IllegalStateException("Sound only support 8-bit or 16-bit depth");
+                        throw new IllegalStateException("Sound only support 8-bit, 16-bit, and 32-bit depth");
                 }
                 channelsOfSamples[indexOut] = (float) ByteBuffer
                         .wrap(sampleByte)

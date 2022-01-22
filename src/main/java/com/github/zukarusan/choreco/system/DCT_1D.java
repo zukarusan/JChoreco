@@ -20,11 +20,11 @@ public class DCT_1D {
         }
     }
 
-    public float[] transform(float[] f) {
-        if (f.length!=m)
-            throw new IllegalArgumentException("Must be the same size matrix as DCT object is specified (m)");
-
-        float[] out = new float[m];
+    public void transform(final float[] f, final float[] out) {
+//        if (f.length!=m)
+//            throw new IllegalArgumentException("Must be the same size matrix as DCT object is specified (m)");
+        assert f.length == m;
+        assert out.length == m;
         for (int i = 0; i < m; i++) {
             double ci = (i==0) ? cm[0] : cm[1];
 
@@ -35,14 +35,13 @@ public class DCT_1D {
             }
             out[i] = (float) (ci * t);
         }
-        return out;
     }
 
-    public float[] inverse(float[] f) {
-        if (f.length!=m)
-            throw new IllegalArgumentException("Must be the same size matrix as DCT object is specified (m)");
-
-        float[] out = new float[m];
+    public void inverse(final float[] f, final float[] out) {
+//        if (f.length!=m)
+//            throw new IllegalArgumentException("Must be the same size matrix as DCT object is specified (m)");
+        assert f.length == m;
+        assert out.length == m;
         for (int k = 0; k < m; k++) {
             double t = 0.0;
 
@@ -53,6 +52,5 @@ public class DCT_1D {
             }
             out[k] = (float) (t);
         }
-        return out;
     }
 }

@@ -1,17 +1,19 @@
 package com.github.zukarusan.choreco.component.spectrum.chroma;
 
 import com.github.zukarusan.choreco.component.LogFrequency;
-import com.github.zukarusan.choreco.component.chroma.CLP;
 import com.github.zukarusan.choreco.component.chroma.CRP;
 import com.github.zukarusan.choreco.component.spectrum.LogFrequencySpectrum;
 import com.github.zukarusan.choreco.system.CommonProcessor;
 import com.github.zukarusan.choreco.system.DCT_1D;
+import com.github.zukarusan.choreco.util.PlotManager;
 import com.github.zukarusan.choreco.util.VectorUtils;
 import lombok.Getter;
 
 import java.util.Arrays;
 
 public class CRPSpectrum extends ChromaSpectrum {
+    static float[] _BUFFER_DCT_ = new float[LogFrequency.PITCH_LENGTH];
+    static DCT_1D dct = new DCT_1D(LogFrequency.PITCH_LENGTH);
     @Getter
     private final double logConstant;
 
@@ -23,13 +25,12 @@ public class CRPSpectrum extends ChromaSpectrum {
 
         CommonProcessor.logCompress(pitches, logConstant);
 
-        DCT_1D dct = new DCT_1D(LogFrequency.PITCH_LENGTH);
         for (int i = 0; i < frameTotal; i++) {
-            float[] t_p = dct.transform(pitches[i]);
+            dct.transform(pitches[i], _BUFFER_DCT_);
             for (int j = 0; j < CRP.p_reduction; j++) {
-                t_p[j] = 0f;
+                _BUFFER_DCT_[j] = 0f;
             }
-            t_pitches[i] = dct.inverse(t_p);
+            dct.inverse(_BUFFER_DCT_, t_pitches[i]);
         }
 
         mapPitch(t_pitches);
@@ -45,5 +46,15 @@ public class CRPSpectrum extends ChromaSpectrum {
             throw new IllegalArgumentException("Out of range index, maximum length: "+
                     String.format("%.2f", dataBuffer.length/frequencyResolution)+" seconds");
         return new CRP(this.dataBuffer[idx], logConstant);
+    }
+
+
+    @Override
+    public void plot() {
+        PlotManager plotManager = PlotManager.getInstance();
+//        SignalProcessor.powerToDb(copy);
+        float[][] copy = setPlot();
+        CommonProcessor.normalizeZeroOne(copy, -1f, 1f);
+        plotManager.createSpectrogram(this+name, copy);
     }
 }

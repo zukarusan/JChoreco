@@ -120,13 +120,27 @@ public class STFT {
     }
 
     public static SignalFFT fftPower(Signal buffer, float sampleRate) {
-        int length = buffer.getData().length;
-        float frequencyResolution = sampleRate / (length);
+        float[] bufferFloat = buffer.getData();
+        float frequencyResolution = sampleRate / (bufferFloat.length);
+        float[] fftBuffer = new float[bufferFloat.length/2];
+        fftPower(bufferFloat, fftBuffer);
+        return new SignalFFT(
+                "fftPower",
+                fftBuffer,
+                sampleRate,
+                frequencyResolution,
+                true,
+                0);
+    }
+
+    public static void fftPower(final float[] buffer, final float[] out) {
+        assert out.length == buffer.length/2;
+        int length = buffer.length;
         FloatFFT_1D fft = new FloatFFT_1D(length);
         float[] tempBuffer = new float[length * 2];
 
         System.arraycopy(
-            buffer.getData(), 0,
+            buffer, 0,
             tempBuffer, 0,
             length
         );
@@ -136,13 +150,11 @@ public class STFT {
         float[] bins = new float[length];
         modulus(tempBuffer, bins);
 
-        return new SignalFFT(
-                "fftPower",
-                Arrays.copyOfRange(bins, 0, (length /2)),
-                sampleRate,
-                frequencyResolution,
-                true,
-                0);
+        System.arraycopy(
+                bins, 0,
+                out, 0,
+                (length/2)
+        );
     }
 
 

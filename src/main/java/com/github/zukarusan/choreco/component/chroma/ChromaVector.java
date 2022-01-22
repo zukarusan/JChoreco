@@ -10,7 +10,7 @@ public abstract class ChromaVector {
     @Getter
     protected final float[] power;
 
-    public ChromaVector(LogFrequencyVector logVector) {
+    public ChromaVector() {
         this.power = new float[Chroma.CHROMATIC_LENGTH];
     }
 
@@ -20,11 +20,14 @@ public abstract class ChromaVector {
         this.power = power;
     }
 
-
     protected void mapPitch(float[] pitches) {
+        mapPitch(pitches, this.power);
+    }
+
+    protected static void mapPitch(float[] pitches, final float[] out_mapped) {
         assert pitches.length == LogFrequency.PITCH_LENGTH;
         for (int i = 0; i < LogFrequency.PITCH_LENGTH; i++) {
-            this.power[i % 12] += pitches[i];
+            out_mapped[i % 12] += pitches[i];
         }
     }
 

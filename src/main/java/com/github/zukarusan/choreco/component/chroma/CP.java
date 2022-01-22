@@ -5,7 +5,7 @@ import com.github.zukarusan.choreco.util.VectorUtils;
 
 public class CP extends ChromaVector{
     public CP(LogFrequencyVector logVector) {
-        super(logVector);
+        super();
         mapPitch(logVector.getPower());
         VectorUtils.normalizeVector(this.power);
     }

@@ -1,5 +1,8 @@
 import com.github.zukarusan.choreco.component.LogFrequencyVector;
 import com.github.zukarusan.choreco.component.SignalFFT;
+import com.github.zukarusan.choreco.component.chroma.CRP;
+import com.github.zukarusan.choreco.component.spectrum.chroma.CLPSpectrum;
+import com.github.zukarusan.choreco.component.spectrum.chroma.CPSpectrum;
 import com.github.zukarusan.choreco.component.spectrum.chroma.CRPSpectrum;
 import com.github.zukarusan.choreco.component.spectrum.chroma.ChromaSpectrum;
 import com.github.zukarusan.choreco.component.spectrum.FrequencySpectrum;
@@ -79,7 +82,7 @@ public class PlotSignalTest {
         plotManager.waitForClose();
     }
 
-    @Test //@Disabled
+    @Test @Disabled
     public void testSpectrogram() throws STFTException {
         assert url1 != null;
 
@@ -92,7 +95,7 @@ public class PlotSignalTest {
         PlotManager plotManager= PlotManager.getInstance();
 
         FrequencySpectrum spectrum = stft.process(mp3Signal, mp3Signal.getSampleRate());
-        CommonProcessor.harmonicPeakSubtract(spectrum.getDataBuffer(), spectrum.getFrequencyResolution(), 6);
+//        CommonProcessor.harmonicPeakSubtract(spectrum.getDataBuffer(), spectrum.getFrequencyResolution(), 6);
         CommonProcessor.logCompress(spectrum, 10000);
         CommonProcessor.powerToDb(spectrum);
         CommonProcessor.normalizeZeroOne(spectrum);
@@ -136,18 +139,43 @@ public class PlotSignalTest {
         PlotManager.getInstance().waitForClose();
     }
 
-    @Test //@Disabled
+    @Test @Disabled
     public void testChroma() throws STFTException {
         Signal signal = guitar_c.getSamples(0);
         STFT stft = new STFT(16384, 8192);
         FrequencySpectrum spectrum = stft.process(signal, signal.getSampleRate());
         CommonProcessor.logCompress(spectrum, 1000);
+        LogFrequencySpectrum logF = new LogFrequencySpectrum(spectrum);
 //        CommonProcessor.powerToDb(spectrum);
 //        CommonProcessor.harmonicPeakSubtract(spectrum.getDataBuffer(), spectrum.getFrequencyResolution(), 10);
-        ChromaSpectrum chroma = new CRPSpectrum(
-                new LogFrequencySpectrum(spectrum),
-                100);
-        chroma.plot();
+        CRPSpectrum crp = new CRPSpectrum(logF, 100);
+        CLPSpectrum clp = new CLPSpectrum(logF, 10);
+//        CPSpectrum cp = new CPSpectrum(logF);
+        crp.plot();
+        clp.plot();
+//        cp.plot();
         PlotManager.getInstance().waitForClose();
     }
+
+    @Test @Disabled
+    public void testChromaVector() throws STFTException {
+        Signal signal = guitar_c.getSamples(0);
+//        STFT stft = new STFT(16384, 8192);
+        SignalFFT freq = STFT.fftPower(signal, signal.getSampleRate());
+        CommonProcessor.logCompress(freq, 1000);
+        LogFrequencyVector logVector = new LogFrequencyVector(freq);
+        CRP crp = new CRP(logVector, 100);
+        crp.plot();
+//        LogFrequencySpectrum logF = new LogFrequencyVector(freq);
+//        CommonProcessor.powerToDb(spectrum);
+//        CommonProcessor.harmonicPeakSubtract(spectrum.getDataBuffer(), spectrum.getFrequencyResolution(), 10);
+//        CRPSpectrum crp = new CRPSpectrum(logF, 100);
+//        CLPSpectrum clp = new CLPSpectrum(logF, 10);
+//        CPSpectrum cp = new CPSpectrum(logF);
+//        crp.plot();
+//        clp.plot();
+//        cp.plot();
+        PlotManager.getInstance().waitForClose();
+    }
+
 }

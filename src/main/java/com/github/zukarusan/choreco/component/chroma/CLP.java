@@ -13,7 +13,7 @@ public class CLP extends ChromaVector{
     private final double logConstant;
 
     public CLP(LogFrequencyVector logVector, double constant) {
-        super(logVector);
+        super();
         this.logConstant = constant;
         float[] pitches = Arrays.copyOf(logVector.getPower(), LogFrequency.PITCH_LENGTH);
         VectorUtils.mapFunc(pitches, (i) -> i * logConstant + 1);

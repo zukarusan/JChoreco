@@ -81,9 +81,10 @@ public class WAVFile extends SoundFile {
 
             clip.setFramePosition(0);
             canPlay = true;
-        } catch (LineUnavailableException | IOException e) {
+        } catch (LineUnavailableException | IOException | IllegalArgumentException e) {
             canPlay = false;
-            throw new SoundException("UNABLE_PLAY", "Error creating sound player", e);
+            System.out.println("ERROR WARN: Cannot initialize player for audio "+ this.name+". Reason: "+e.getMessage());
+//            throw new SoundException("UNABLE_PLAY", "Error creating sound player", e);
         }
     }
 

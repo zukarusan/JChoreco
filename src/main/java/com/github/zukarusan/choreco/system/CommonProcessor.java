@@ -12,6 +12,8 @@ import be.tarsos.dsp.beatroot.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Float.NaN;
+
 
 public class CommonProcessor {
 
@@ -253,22 +255,35 @@ public class CommonProcessor {
     public static void normalizeZeroOne(Spectrum spectrum) {
         normalizeZeroOne(spectrum.getDataBuffer());
     }
+    public static void normalizeZeroOne(final float[][] data) {
+        normalizeZeroOne(data, null, null);
+    }
 
-    public static void normalizeZeroOne(float[][] data) {
+    public static void normalizeZeroOne(Spectrum spectrum, Float min, Float max) {
+        normalizeZeroOne(spectrum.getDataBuffer(), min, max);
+    }
+
+    public static void normalizeZeroOne(final float[][] data, Float min, Float max) {
         int frameTotal = data.length;
         int n = data[0].length;
         float maxAmp = data[0][0], minAmp = maxAmp;
-        for (float[] datum : data) {
-            if (datum[0] > maxAmp) {
-                maxAmp = datum[0];
-            } else if (datum[0] < minAmp) {
-                minAmp = datum[0];
-            }
-            for (int j = 0; j + 1 < n; j++) {
-                if (datum[j + 1] > maxAmp) {
-                    maxAmp = datum[j + 1];
-                } else if (datum[j + 1] < minAmp) {
-                    minAmp = datum[j + 1];
+        if (min != null && max != null) {
+            minAmp = min;
+            maxAmp = max;
+        }
+        else {
+            for (float[] datum : data) {
+                if (datum[0] > maxAmp) {
+                    maxAmp = datum[0];
+                } else if (datum[0] < minAmp) {
+                    minAmp = datum[0];
+                }
+                for (int j = 0; j + 1 < n; j++) {
+                    if (datum[j + 1] > maxAmp) {
+                        maxAmp = datum[j + 1];
+                    } else if (datum[j + 1] < minAmp) {
+                        minAmp = datum[j + 1];
+                    }
                 }
             }
         }
@@ -342,6 +357,10 @@ public class CommonProcessor {
         for (int i = 0; i < data.length; i++) {
             data[i] = (float) (10 * Math.log10(data[i]));
         }
+    }
+
+    public static void logCompress(Signal signal, double constant) {
+        logCompress(signal.getData(), constant);
     }
 
     public static void logCompress(float[] data, double constant) {

@@ -29,8 +29,7 @@ public abstract class ChromaSpectrum extends Spectrum {
 
     public abstract ChromaVector getVectorAt(float second);
 
-    public void plot() {
-        PlotManager plotManager = PlotManager.getInstance();
+    protected float[][] setPlot() {
         int size = (int) ((PlotManager.HEIGHT / 2 - PlotManager.HEIGHT / 2 * 0.1) / (frameLength));
         float[][] copy = new float[frameTotal][size * frameLength];
         for (int i = 0; i < frameTotal; i++) {
@@ -38,8 +37,14 @@ public abstract class ChromaSpectrum extends Spectrum {
                 Arrays.fill(copy[i], k, k+size, dataBuffer[i][j]);
             }
         }
+        return copy;
+    }
+
+    public void plot() {
+        PlotManager plotManager = PlotManager.getInstance();
+        float[][] copy = setPlot();
 //        SignalProcessor.powerToDb(copy);
-        CommonProcessor.normalizeZeroOne(copy);
-        plotManager.createSpectrogram(name, copy);
+        CommonProcessor.normalizeZeroOne(copy, 0f, 1f);
+        plotManager.createSpectrogram(this+name, copy);
     }
 }
