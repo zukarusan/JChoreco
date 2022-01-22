@@ -10,8 +10,8 @@ javafx {
 //    configuration = "compileOnly"
 }
 
-group = "org.president.ac.id"
-version = "1.0-SNAPSHOT"
+group = "com.github.zukarusan"
+version = "1.0.0-alpha"
 
 repositories {
     mavenCentral()
