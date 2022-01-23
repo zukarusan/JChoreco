@@ -1,13 +1,6 @@
 plugins {
     java
     id("application")
-    id("org.openjfx.javafxplugin") version "0.0.10"
-}
-
-javafx {
-    version = "11"
-    modules("javafx.controls",  "javafx.fxml")
-//    configuration = "compileOnly"
 }
 
 group = "com.github.zukarusan"
@@ -19,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
     implementation("com.github.axet:TarsosDSP:2.4")
@@ -30,7 +23,7 @@ dependencies {
     implementation("commons-cli:commons-cli:1.5.0")
     implementation("com.opencsv:opencsv:5.5.2")
     implementation("commons-io:commons-io:2.11.0")
-    implementation("org.tensorflow:tensorflow-core-platform:0.3.3")
+    implementation("org.tensorflow:tensorflow-core-platform:0.4.0")
 
     compileOnly ("org.projectlombok:lombok:1.18.22")
     annotationProcessor ("org.projectlombok:lombok:1.18.22")

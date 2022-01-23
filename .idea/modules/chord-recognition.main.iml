@@ -9,18 +9,15 @@
     <content url="file://$MODULE_DIR$/../../src/main">
       <sourceFolder url="file://$MODULE_DIR$/../../src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../src/main/resources" type="java-resource" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../src/main/resources" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.projectlombok:lombok:1.18.22" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-fxml:win:11" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:11" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:win:11" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:11" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:win:11" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:11" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:win:11" level="project" />
     <orderEntry type="library" name="Gradle: com.github.axet:TarsosDSP:2.4" level="project" />
     <orderEntry type="library" name="Gradle: com.github.wendykierp:JTransforms:3.1" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-math3:3.6.1" level="project" />

@@ -3,25 +3,19 @@
   <component name="NewModuleRootManager">
     <output-test url="file://$MODULE_DIR$/../../build/classes/java/test" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../build/generated/sources/annotationProcessor/java/test">
-      <sourceFolder url="file://$MODULE_DIR$/../../build/generated/sources/annotationProcessor/java/test" isTestSource="true" generated="true" />
-    </content>
     <content url="file://$MODULE_DIR$/../../src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../src/test/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../src/test/resources" type="java-test-resource" />
     </content>
+    <content url="file://$MODULE_DIR$/../../src/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/test/resources" type="java-test-resource" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="chord-recognition.main" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-fxml:win:11" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:11" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:win:11" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:11" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:win:11" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:11" level="project" />
-    <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:win:11" level="project" />
     <orderEntry type="library" name="Gradle: com.github.axet:TarsosDSP:2.4" level="project" />
     <orderEntry type="library" name="Gradle: com.github.wendykierp:JTransforms:3.1" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-math3:3.6.1" level="project" />
