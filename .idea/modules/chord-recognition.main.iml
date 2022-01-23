@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="chord-recognition:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="com.github.zukarusan" external.system.module.type="sourceSet" external.system.module.version="1.0.0-alpha" type="JAVA_MODULE" version="4">
+<module external.linked.project.id="chord-recognition:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="com.github.zukarusan" external.system.module.type="sourceSet" external.system.module.version="1.0.0-alpha.1" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/../../build/classes/java/main" />
     <exclude-output />
@@ -26,7 +26,7 @@
     <orderEntry type="library" name="Gradle: commons-cli:commons-cli:1.5.0" level="project" />
     <orderEntry type="library" name="Gradle: com.opencsv:opencsv:5.5.2" level="project" />
     <orderEntry type="library" name="Gradle: commons-io:commons-io:2.11.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.tensorflow:tensorflow-core-platform:0.3.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.tensorflow:tensorflow-core-platform:0.4.0" level="project" />
     <orderEntry type="library" name="Gradle: pl.edu.icm:JLargeArrays:1.5" level="project" />
     <orderEntry type="library" name="Gradle: com.github.yannrichet:JMathIO:1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.yannrichet:JMathArray:1.0" level="project" />
@@ -34,18 +34,18 @@
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-lang3:3.12.0" level="project" />
     <orderEntry type="library" name="Gradle: commons-beanutils:commons-beanutils:1.9.4" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-collections4:4.4" level="project" />
-    <orderEntry type="library" name="Gradle: org.tensorflow:tensorflow-core-api:0.3.3" level="project" />
-    <orderEntry type="library" name="Gradle: org.tensorflow:tensorflow-core-api:linux-x86_64:0.3.3" level="project" />
-    <orderEntry type="library" name="Gradle: org.tensorflow:tensorflow-core-api:macosx-x86_64:0.3.3" level="project" />
-    <orderEntry type="library" name="Gradle: org.tensorflow:tensorflow-core-api:windows-x86_64:0.3.3" level="project" />
-    <orderEntry type="library" name="Gradle: org.bytedeco:javacpp:1.5.4" level="project" />
-    <orderEntry type="library" name="Gradle: org.bytedeco:javacpp:linux-x86_64:1.5.4" level="project" />
-    <orderEntry type="library" name="Gradle: org.bytedeco:javacpp:macosx-x86_64:1.5.4" level="project" />
-    <orderEntry type="library" name="Gradle: org.bytedeco:javacpp:windows-x86_64:1.5.4" level="project" />
+    <orderEntry type="library" name="Gradle: org.tensorflow:tensorflow-core-api:0.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.tensorflow:tensorflow-core-api:linux-x86_64:0.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.tensorflow:tensorflow-core-api:macosx-x86_64:0.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.tensorflow:tensorflow-core-api:windows-x86_64:0.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco:javacpp:1.5.6" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco:javacpp:linux-x86_64:1.5.6" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco:javacpp:macosx-x86_64:1.5.6" level="project" />
+    <orderEntry type="library" name="Gradle: org.bytedeco:javacpp:windows-x86_64:1.5.6" level="project" />
     <orderEntry type="library" name="Gradle: gov.nist.math:jama:1.0.3" level="project" />
     <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
     <orderEntry type="library" name="Gradle: commons-collections:commons-collections:3.2.2" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:3.8.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:3.9.2" level="project" />
     <orderEntry type="library" name="Gradle: org.tensorflow:ndarray:0.3.3" level="project" />
   </component>
 </module>

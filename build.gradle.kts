@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.github.zukarusan"
-version = "1.0.0-alpha"
+version = "1.0.0-alpha.1"
 
 repositories {
     mavenCentral()

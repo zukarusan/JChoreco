@@ -75,7 +75,7 @@ public class ChordProcessor implements AudioProcessor {
                 if (isDebug) {
                     Graph graph = smb.graph();
                     System.out.println("Operations: ");
-                    for (Iterator<Operation> it = graph.operations(); it.hasNext(); ) {
+                    for (Iterator<GraphOperation> it = graph.operations(); it.hasNext(); ) {
                         GraphOperation go = (GraphOperation) it.next();
                         System.out.println("\""+ go.name() + "\" => " + go.type());
                     }
