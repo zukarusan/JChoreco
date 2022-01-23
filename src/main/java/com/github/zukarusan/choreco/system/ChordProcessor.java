@@ -90,7 +90,7 @@ public final class ChordProcessor implements AudioProcessor, AutoCloseable{
     }
 
     @Override
-    public void close() {
+    public void close() { // TODO find running still program after close
         chordModel.close();
         predicted.close();
     }

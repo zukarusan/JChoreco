@@ -21,6 +21,7 @@ public class CLIChordRecognizer {
         PrintStream output_chords = new PrintStream(System.out);
         ChordProcessor chordProcessor = new ChordProcessor(SAMPLE_RATE, BUFFER_SIZE, output_chords);
         dispatcher.addAudioProcessor(chordProcessor);
+
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {  // SAFE SHUTDOWN HOOK FOR RELEASING RESOURCES
                 System.out.println("Releasing Resources");
                 chordProcessor.close();
