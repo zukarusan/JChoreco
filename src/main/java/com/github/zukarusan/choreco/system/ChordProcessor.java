@@ -79,7 +79,7 @@ public class ChordProcessor implements AudioProcessor {
                     Graph graph = smb.graph();
                     System.out.println("Operations: ");
                     for (Iterator<GraphOperation> it = graph.operations(); it.hasNext(); ) {
-                        GraphOperation go = (GraphOperation) it.next();
+                        GraphOperation go = it.next();
                         System.out.println("\""+ go.name() + "\" => " + go.type());
                     }
                 }
@@ -143,7 +143,7 @@ public class ChordProcessor implements AudioProcessor {
             array[0] = value;
         }
         for (int i = 1; i < len; i += i) {
-            System.arraycopy(array, 0, array, i, ((len - i) < i) ? (len - i) : i);
+            System.arraycopy(array, 0, array, i, Math.min((len - i), i));
         }
     }
 
