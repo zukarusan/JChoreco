@@ -22,8 +22,8 @@ public class SwingChordRecognizer {
         JFrame frame = new JFrame("Swing Chord Recognizer Example");
         JLabel title = new JLabel("CHORD RECOGNIZER");
         JLabel chord = new JLabel();
-        title.setFont(new Font("Serif", Font.BOLD, 40));
-        chord.setFont(new Font("Serif", Font.PLAIN, 35));
+        title.setFont(new Font("Serif", Font.BOLD, 30));
+        chord.setFont(new Font("Serif", Font.PLAIN, 25));
         frame.setSize(WIDTH, HEIGHT);
         title.setBounds(WIDTH/2, HEIGHT/4, WIDTH, HEIGHT);
         chord.setBounds(WIDTH/2, HEIGHT*3/4, WIDTH, HEIGHT);
@@ -50,5 +50,6 @@ public class SwingChordRecognizer {
         PrintStream output_chords = new PrintStream(labelBuffer);
         chordProcessor = new ChordProcessor(SAMPLE_RATE, BUFFER_SIZE, output_chords);
         dispatcher.addAudioProcessor(chordProcessor);
+        chordProcessor.close();
     }
 }

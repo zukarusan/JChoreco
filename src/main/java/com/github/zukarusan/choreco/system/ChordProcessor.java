@@ -7,21 +7,16 @@ import com.github.zukarusan.choreco.component.LogFrequency;
 import com.github.zukarusan.choreco.component.LogFrequencyVector;
 import com.github.zukarusan.choreco.component.chroma.CRP;
 import com.github.zukarusan.choreco.component.chroma.Chroma;
+import com.github.zukarusan.choreco.component.tfmodel.TFChordLite;
+import com.github.zukarusan.choreco.component.tfmodel.TFChordModel;
+import com.github.zukarusan.choreco.component.tfmodel.TFChordSTD;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.tensorflow.*;
-import org.tensorflow.ndarray.Shape;
-import org.tensorflow.ndarray.buffer.DataBuffers;
-import org.tensorflow.ndarray.buffer.FloatDataBuffer;
-import org.tensorflow.types.TFloat32;
 
-import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.net.URL;
-import java.util.Iterator;
 
-public class ChordProcessor implements AudioProcessor {
+public class ChordProcessor implements AudioProcessor, AutoCloseable{
     static boolean _IS_ANDROID_ = (System.getProperty("java.specification.vendor").contains("Android"));
     static public boolean isDebug = false;
 
@@ -35,86 +30,6 @@ public class ChordProcessor implements AudioProcessor {
     private final STFT fftWindower;
     private final TFChordModel chordModel;
     private final PrintStream predicted;
-
-
-    public interface TFChordModel {
-        int predict();
-        void close();
-    }
-
-    final public static class TFChordLite implements TFChordModel { // TODO: develop for android .tflite model
-
-        @Override
-        public int predict() {
-            return 0;
-        }
-
-        @Override
-        public void close() {
-
-        }
-    }
-    final public static class TFChordSTD implements TFChordModel {
-        private final Session.Runner runner;
-        private final TFloat32 input;
-        private final float[] output = new float[Chord.Total];
-        private final FloatDataBuffer oBuffer = DataBuffers.of(output);
-        private final FloatDataBuffer iBuffer;
-
-        SavedModelBundle smb;
-        private boolean isClose = false;
-
-        public TFChordSTD(final float[] input_feeder) {
-            if (input_feeder.length != Chroma.CHROMATIC_LENGTH) {
-                throw new IllegalArgumentException("Input feeder buffer must be the length of chroma vector. " +
-                        "Expected: "+Chroma.CHROMATIC_LENGTH+". Given: "+input_feeder.length);
-            }
-            URL url = this.getClass().getClassLoader().getResource("model_chord");
-            this.iBuffer = DataBuffers.of(input_feeder);
-            this.input = TFloat32.tensorOf(Shape.of(1, Chroma.CHROMATIC_LENGTH), iBuffer);
-            assert url != null;
-            smb = SavedModelBundle.load(new File(url.getPath()).getAbsolutePath(), "serve");
-            try {
-                if (isDebug) {
-                    Graph graph = smb.graph();
-                    System.out.println("Operations: ");
-                    for (Iterator<GraphOperation> it = graph.operations(); it.hasNext(); ) {
-                        GraphOperation go = it.next();
-                        System.out.println("\""+ go.name() + "\" => " + go.type());
-                    }
-                }
-                runner = smb.session().runner().feed("serving_default_input_1", input).fetch("StatefulPartitionedCall");
-            } catch (Exception e) {
-                input.close();
-                smb.close();
-                throw new IllegalStateException("Failed to instantiate session of model", e);
-            }
-        }
-
-        @Override
-        public int predict() {
-            assert !isClose;
-            int max = 0;
-            input.write(iBuffer);
-                try(TFloat32 outTensor = (TFloat32) runner.run().get(0)) {
-                    outTensor.read(oBuffer);
-                    for (int i = 1; i < Chord.Total; ++i)
-                        if (output[i] > output[max]) max = i;
-                } catch (Exception e) {
-                    input.close();
-                    smb.close();
-                    throw new IllegalStateException("Cannot fetch model: ", e);
-                }
-            return max;
-        }
-
-        @Override
-        public void close() {
-            smb.close();
-            input.close();
-            isClose = true;
-        }
-    }
 
     public ChordProcessor(float sampleRate, int bufferSize, PrintStream predicted) {
         this.bufferSize = bufferSize;
@@ -174,6 +89,7 @@ public class ChordProcessor implements AudioProcessor {
         close();
     }
 
+    @Override
     public void close() {
         chordModel.close();
         predicted.close();
