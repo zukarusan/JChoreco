@@ -20,10 +20,11 @@ dependencies {
     implementation("com.github.yannrichet:JMathPlot:1.0.1")
     implementation("javazoom:jlayer:1.0.1")
     implementation("com.github.wendykierp:JTransforms:3.1")
+    implementation("org.tensorflow:tensorflow-core-platform:0.4.0")
+
     implementation("commons-cli:commons-cli:1.5.0")
     implementation("com.opencsv:opencsv:5.5.2")
     implementation("commons-io:commons-io:2.11.0")
-    implementation("org.tensorflow:tensorflow-core-platform:0.4.0")
 
     compileOnly ("org.projectlombok:lombok:1.18.22")
     annotationProcessor ("org.projectlombok:lombok:1.18.22")

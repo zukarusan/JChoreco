@@ -33,20 +33,19 @@ public class ChordProcessor implements AudioProcessor {
     private final int bufferSize;
     private final float sampleRate;
     private final STFT fftWindower;
-    private final FloatDataBuffer tensorFeeder;
     private final TFChordModel chordModel;
     private final PrintStream predicted;
 
 
     public interface TFChordModel {
-        int predict(FloatDataBuffer chroma);
+        int predict();
         void close();
     }
 
     final public static class TFChordLite implements TFChordModel { // TODO: develop for android .tflite model
 
         @Override
-        public int predict(FloatDataBuffer chroma) {
+        public int predict() {
             return 0;
         }
 
@@ -60,15 +59,19 @@ public class ChordProcessor implements AudioProcessor {
         private final TFloat32 input;
         private final float[] output = new float[Chord.Total];
         private final FloatDataBuffer oBuffer = DataBuffers.of(output);
+        private final FloatDataBuffer iBuffer;
 
         SavedModelBundle smb;
         private boolean isClose = false;
 
-        public TFChordSTD() {
-            /* URL url = getClass().getResource("model_std"); */
+        public TFChordSTD(final float[] input_feeder) {
+            if (input_feeder.length != Chroma.CHROMATIC_LENGTH) {
+                throw new IllegalArgumentException("Input feeder buffer must be the length of chroma vector. " +
+                        "Expected: "+Chroma.CHROMATIC_LENGTH+". Given: "+input_feeder.length);
+            }
             URL url = this.getClass().getClassLoader().getResource("model_chord");
-            FloatDataBuffer iBuffer = DataBuffers.of(new float[Chroma.CHROMATIC_LENGTH]);
-            input = TFloat32.tensorOf(Shape.of(1, Chroma.CHROMATIC_LENGTH), iBuffer);
+            this.iBuffer = DataBuffers.of(input_feeder);
+            this.input = TFloat32.tensorOf(Shape.of(1, Chroma.CHROMATIC_LENGTH), iBuffer);
             assert url != null;
             smb = SavedModelBundle.load(new File(url.getPath()).getAbsolutePath(), "serve");
             try {
@@ -89,10 +92,10 @@ public class ChordProcessor implements AudioProcessor {
         }
 
         @Override
-        public int predict(FloatDataBuffer chroma) {
+        public int predict() {
             assert !isClose;
             int max = 0;
-            input.write(chroma);
+            input.write(iBuffer);
                 try(TFloat32 outTensor = (TFloat32) runner.run().get(0)) {
                     outTensor.read(oBuffer);
                     for (int i = 1; i < Chord.Total; ++i)
@@ -120,12 +123,11 @@ public class ChordProcessor implements AudioProcessor {
         _FFT_BUFFER_ = new float[bufferSize/2];
         _PITCH_BUFFER_ = new float[LogFrequency.PITCH_LENGTH];
         _CRP_BUFFER_ = new float[Chroma.CHROMATIC_LENGTH];
-        this.tensorFeeder = DataBuffers.of(_CRP_BUFFER_);
         this.freqMaps = LogFrequencyVector.createFreqMaps(_FFT_BUFFER_, sampleRate);
         this.fftWindower = new STFT(bufferSize, bufferSize/2);
 
         if (!_IS_ANDROID_)
-            this.chordModel = new TFChordSTD();
+            this.chordModel = new TFChordSTD(_CRP_BUFFER_);
         else
             this.chordModel = new TFChordLite();
 
@@ -161,7 +163,8 @@ public class ChordProcessor implements AudioProcessor {
         CRP.process(_PITCH_BUFFER_, LOG_CONSTANT, _CRP_BUFFER_);
 
         predicted.println(
-                Chord.get(chordModel.predict(tensorFeeder)));
+                Chord.get(chordModel.predict())
+        );
         return true;
     }
 
