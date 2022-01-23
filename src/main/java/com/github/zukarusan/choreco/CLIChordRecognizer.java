@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class CLIChordRecognizer {
     static final float SAMPLE_RATE = 44100;
-    static final int BUFFER_SIZE = 1024 * 16;
+    static final int BUFFER_SIZE = 44100;
     static ChordProcessor chordProcessor;
     static Thread chordThread = null;
     public static void main(String[] args) throws LineUnavailableException, IOException {
@@ -30,7 +30,7 @@ public class CLIChordRecognizer {
         chordThread = new Thread(dispatcher, "Chord recognizer");
 
         System.out.println("============================ CHORD RECOGNIZER ========================================");
-        System.out.println("                  Input chars and enter to quit the program                           ");
+        System.out.println("               Input chars and enter to exit (interrupt) the program                  ");
         System.out.println("======================================================================================");
         chordThread.start();
         new BufferedReader(new InputStreamReader(System.in)).readLine();

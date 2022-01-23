@@ -30,9 +30,10 @@ public class ChordProcessor implements AudioProcessor {
     private final float[] _FFT_BUFFER_;
     private final float[] _PITCH_BUFFER_;
     private final float[] _CRP_BUFFER_;
-    private final FloatDataBuffer tensorFeeder;
     private final int bufferSize;
     private final float sampleRate;
+    private final STFT fftWindower;
+    private final FloatDataBuffer tensorFeeder;
     private final TFChordModel chordModel;
     private final PrintStream predicted;
 
@@ -65,7 +66,7 @@ public class ChordProcessor implements AudioProcessor {
 
         public TFChordSTD() {
             /* URL url = getClass().getResource("model_std"); */
-            URL url = this.getClass().getClassLoader().getResource("raw_2nd_good");
+            URL url = this.getClass().getClassLoader().getResource("model_chord");
             FloatDataBuffer iBuffer = DataBuffers.of(new float[Chroma.CHROMATIC_LENGTH]);
             input = TFloat32.tensorOf(Shape.of(1, Chroma.CHROMATIC_LENGTH), iBuffer);
             assert url != null;
@@ -95,7 +96,7 @@ public class ChordProcessor implements AudioProcessor {
                 try(TFloat32 outTensor = (TFloat32) runner.run().get(0)) {
                     outTensor.read(oBuffer);
                     for (int i = 1; i < Chord.Total; ++i)
-                        max = (output[i] > max) ? i : (i-1);
+                        if (output[i] > output[max]) max = i;
                 } catch (Exception e) {
                     input.close();
                     smb.close();
@@ -115,18 +116,19 @@ public class ChordProcessor implements AudioProcessor {
     public ChordProcessor(float sampleRate, int bufferSize, PrintStream predicted) {
         this.bufferSize = bufferSize;
         this.sampleRate = sampleRate;
+        this.predicted = predicted;
         _FFT_BUFFER_ = new float[bufferSize/2];
         _PITCH_BUFFER_ = new float[LogFrequency.PITCH_LENGTH];
         _CRP_BUFFER_ = new float[Chroma.CHROMATIC_LENGTH];
-        tensorFeeder = DataBuffers.of(_CRP_BUFFER_);
-        freqMaps = LogFrequencyVector.createFreqMaps(_FFT_BUFFER_, sampleRate);
+        this.tensorFeeder = DataBuffers.of(_CRP_BUFFER_);
+        this.freqMaps = LogFrequencyVector.createFreqMaps(_FFT_BUFFER_, sampleRate);
+        this.fftWindower = new STFT(bufferSize, bufferSize/2);
 
         if (!_IS_ANDROID_)
             this.chordModel = new TFChordSTD();
         else
             this.chordModel = new TFChordLite();
 
-        this.predicted = predicted;
     }
 
     public ChordProcessor(float sampleRate, int bufferSize, OutputStream predicted) {
@@ -143,7 +145,6 @@ public class ChordProcessor implements AudioProcessor {
         }
     }
 
-    @SneakyThrows
     @Override
     public boolean process(AudioEvent audioEvent) {
         float[] buffer = audioEvent.getFloatBuffer();
@@ -152,6 +153,7 @@ public class ChordProcessor implements AudioProcessor {
         floatFill(_PITCH_BUFFER_, 0);
         floatFill(_CRP_BUFFER_, 0);
 
+        fftWindower.windowFunc(buffer);
         STFT.fftPower(buffer, _FFT_BUFFER_);
         double LOG_CONSTANT = 100.0;
         CommonProcessor.logCompress(_FFT_BUFFER_, LOG_CONSTANT);
