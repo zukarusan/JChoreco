@@ -11,7 +11,7 @@ import java.util.concurrent.Phaser;
 
 import static javax.swing.UIManager.getColor;
 
-public class PlotManager {
+public final class PlotManager {
     private static volatile PlotManager instance;
     public static final int WIDTH= 1920, HEIGHT= 1080;
     private final Phaser closePhaser;

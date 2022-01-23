@@ -4,7 +4,7 @@ import com.github.zukarusan.choreco.util.PlotManager;
 
 import java.util.Arrays;
 
-public  class LogFrequency {
+public final class LogFrequency {
     private static volatile LogFrequency instance;
     private final float[] frequencies;
     public static final float REFERENCE_FREQUENCY = 440f;

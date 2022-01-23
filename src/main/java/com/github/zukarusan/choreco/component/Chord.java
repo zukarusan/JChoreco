@@ -1,6 +1,6 @@
 package com.github.zukarusan.choreco.component;
 
-public class Chord {
+public final class Chord {
     public static String[] Labels = {
             "A#maj", "A#min", "Amaj", "Amin", "Bmaj", "Bmin", "C#maj", "C#min",
             "Cmaj", "Cmin", "D#maj", "D#min", "Dmaj", "Dmin", "Emaj", "Emin",

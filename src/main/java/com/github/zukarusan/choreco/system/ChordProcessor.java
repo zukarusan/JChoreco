@@ -16,7 +16,7 @@ import lombok.SneakyThrows;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-public class ChordProcessor implements AudioProcessor, AutoCloseable{
+public final class ChordProcessor implements AudioProcessor, AutoCloseable{
     static boolean _IS_ANDROID_ = (System.getProperty("java.specification.vendor").contains("Android"));
     static public boolean isDebug = false;
 

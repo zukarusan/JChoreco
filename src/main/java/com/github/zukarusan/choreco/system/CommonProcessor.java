@@ -15,7 +15,7 @@ import java.util.List;
 import static java.lang.Float.NaN;
 
 
-public class CommonProcessor {
+public final class CommonProcessor {
 
     public static void harmonicPeakSubtract(float[][] bins, float freqRes, int harmonic_size) {
         int len = bins.length;
@@ -125,7 +125,7 @@ public class CommonProcessor {
 
     public static int findPeaksByExtremePoints(float[] data, int[] peaks, int width) {
         int peakCount = 0;
-        int maxp = 0;
+        int maxp;
         int mid = 0;
         int end = data.length;
         while (mid < end) {

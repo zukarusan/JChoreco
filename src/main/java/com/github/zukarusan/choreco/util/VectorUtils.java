@@ -2,7 +2,7 @@ package com.github.zukarusan.choreco.util;
 
 import java.util.function.Function;
 
-public class VectorUtils {
+public final class VectorUtils {
 
     public static double euclidDistance(float[] vector) {
         double dist = 0;
