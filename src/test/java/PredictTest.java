@@ -1,5 +1,9 @@
 import com.github.zukarusan.choreco.component.Chord;
+import com.github.zukarusan.choreco.component.Signal;
 import com.github.zukarusan.choreco.component.chroma.Chroma;
+import com.github.zukarusan.choreco.component.sound.MP3File;
+import com.github.zukarusan.choreco.component.sound.WAVFile;
+import com.github.zukarusan.choreco.system.CRPVectorFactory;
 import com.github.zukarusan.choreco.system.ChordPredictor;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -17,13 +21,18 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PredictTest {
 
     @Test
     public void singletonTest() {
-        try(ChordPredictor predictor = ChordPredictor.getInstance()) {
-            predictor.predict(new float[Chroma.CHROMATIC_LENGTH]);
+        String pathFile = Objects.requireNonNull(getClass().getResource("major.mp3")).getPath();
+        Signal signal = new MP3File(new File(pathFile)).getSamples(0);
+
+        try (ChordPredictor predictor = ChordPredictor.getInstance()) {
+            String chord = predictor.predict(CRPVectorFactory.from_signal(signal));
+            System.out.println(chord);
         }
     }
 
