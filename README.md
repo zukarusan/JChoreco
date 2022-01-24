@@ -87,8 +87,6 @@ float[] chromaCRP = CRPVectorFactory.from_floatSamples(samples, sampleRate);
 
 ### Predicting chord from chroma vector
 
----
-
 > ***CAUTION*** : Using this library chord predictor/processor is not thread-safe. This is because the current tensorflow
 > model java api (v0.4.0) declare that some of its resources must be manually released by the caller.
 > 
