@@ -23,6 +23,17 @@ This toolkit has currently the following main component classes:
 - `Spectrum`: A full description abstract class that has spectral information with the given sub-classed type
 - `Tensorflow Model`: A specific tensorflow model loader and runner with its [Java API][2]. The loaded model is
   pretrained and stored in main resources package
+  
+## Chord sets
+
+---
+
+Avalaible chord sets that can be predicted by the pre-trained neural model is located in the Chord.java class. They are in all keys with only major and minor scale:
+  
+    "A#maj", "A#min", "Amaj", "Amin", "Bmaj", "Bmin", "C#maj", "C#min",
+    "Cmaj", "Cmin", "D#maj", "D#min", "Dmaj", "Dmin", "Emaj", "Emin",
+    "F#maj", "F#min", "Fmaj", "Fmin", "G#maj", "G#min", "Gmaj", "Gmin"
+
 
 ## Quick wrap example
 
