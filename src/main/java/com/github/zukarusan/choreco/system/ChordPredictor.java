@@ -2,6 +2,7 @@ package com.github.zukarusan.choreco.system;
 
 
 import com.github.zukarusan.choreco.component.Chord;
+import com.github.zukarusan.choreco.component.chroma.CRP;
 import com.github.zukarusan.choreco.component.chroma.Chroma;
 import com.github.zukarusan.choreco.component.tfmodel.TFChordLite;
 import com.github.zukarusan.choreco.component.tfmodel.TFChordModel;
@@ -39,6 +40,11 @@ public final class ChordPredictor implements AutoCloseable {
             chordModel = new TFChordSTD(chromaBuffer);
         else
             chordModel = new TFChordLite();
+    }
+
+    public String predict(final CRP crpVector) {
+        float[] data = crpVector.getPower();
+        return predict(data);
     }
 
     public String predict(final float[] crpVector) {
