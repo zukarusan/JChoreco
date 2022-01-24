@@ -46,7 +46,7 @@ System.out.println(chord)
 ### Extracting samples
 Use either `SoundFile` or *TarsosDSP*'s [`AudioDispatcher`][4] to retrieve, respectively, full or buffer 
 samples from an audio. For `SoundFile`:
-```
+```java
 File file = new File(pathString); // java.io.File
 
 // Caution: This retrieves all sample from the file
@@ -65,7 +65,7 @@ For *TarsosDSP*'s` approach, refer to its [example applications][5]
 ### Collecting  chroma (CRP) vector
 
 Simply use `CRPVectorFactory` to exctract the chroma vector from samples sources
-```
+```java
 CRP chromaCRP = CRPVectorFactory.from_signal(signal);
 // or
 float[] chromaCRP = CRPVectorFactory.from_floatSamples(samples, sampleRate);
@@ -87,7 +87,7 @@ float[] chromaCRP = CRPVectorFactory.from_floatSamples(samples, sampleRate);
 
 Surround with try-with-resources block:
 
-```
+```java
 // use try-with-resources block
 try (ChordPredictor predictor = ChordPredictor.getInstance()) {
       String chord = predictor.predict(chromaCRP); // predict the chord
@@ -101,11 +101,11 @@ try (ChordPredictor predictor = ChordPredictor.getInstance()) {
 ```
 or manually call the `close()`:
 
-```
+```java
 // use with manual close()
-ChordPredictor predictor = ChordPredictor.getInstance()
+ChordPredictor predictor = ChordPredictor.getInstance();
 System.out.println(predictor.predict(chromaCRP)); 
-predictor.close() // call the close() whenever finished using it
+predictor.close(); // call the close() whenever finished using it
 ```
 
 #### Using *TarsosDSP* 's `AudioProcessor` as `ChordProcessor`
@@ -119,7 +119,7 @@ is an idea to predict chord in buffer.
 To retrieve the chord bytes of lined string ( the processor output a form of`(chord + '\n')`) ,
 create a class of java `OutputStream` first:
 
-```
+```java
 int BUFFER_SIZE = 1024 * 16; // 16384 bytes or more is good for chord audio buffering
 AudioDispatcher dispatcher = AudioDispatcherFactory.fromFile(file, BUFFER_SIZE, BUFFER_SIZE/2);
 
