@@ -28,7 +28,7 @@ This toolkit has currently the following main component classes:
 
 ---
 
-Avalaible chord sets that can be predicted by the pre-trained neural model is located in the Chord.java class. They are in all keys with only major and minor scale:
+Avalaible chord sets that can be predicted by the pre-trained neural model is located in the Chord.java class. They are in all keys with only major and minor scale. The chords list given the model output are respectively:
   
     "A#maj", "A#min", "Amaj", "Amin", "Bmaj", "Bmin", "C#maj", "C#min",
     "Cmaj", "Cmin", "D#maj", "D#min", "Dmaj", "Dmin", "Emaj", "Emin",
