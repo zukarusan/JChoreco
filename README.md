@@ -24,7 +24,7 @@ This toolkit has currently the following main component classes:
 - `Tensorflow Model`: A specific tensorflow model loader and runner with its [Java API][2]. The loaded model is
   pretrained and stored in main resources package
   
-## Chord sets
+## Chord sets and model
 
 ---
 
@@ -33,7 +33,8 @@ Avalaible chord sets that can be predicted by the pre-trained neural model is lo
     "A#maj", "A#min", "Amaj", "Amin", "Bmaj", "Bmin", "C#maj", "C#min",
     "Cmaj", "Cmin", "D#maj", "D#min", "Dmaj", "Dmin", "Emaj", "Emin",
     "F#maj", "F#min", "Fmaj", "Fmin", "G#maj", "G#min", "Gmaj", "Gmin"
-
+   
+The model is set to have ~0.7 testing accuracy with the testing subset consisting of ~400 samples of chroma (specifically CRP) vectors
 
 ## Quick wrap example
 
