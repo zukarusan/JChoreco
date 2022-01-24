@@ -122,7 +122,7 @@ System.out.println(predictor.predict(chromaCRP));
 predictor.close(); // call the close() whenever finished using it
 ```
 
-#### Using *TarsosDSP* 's `AudioProcessor` as `ChordProcessor`
+#### Using `ChordProcessor` and `AudioDispatcher` from TarsosDSP
 
 *TarsosDSP*'s `AudioDispatcher` runs on an audio input stream and provide the sample buffer
 every once a time defined by the constructor. Adding the `ChordProcessor` to the dispatcher
