@@ -140,7 +140,7 @@ There are 2 provided examples in the main package:
 
 - **CLIChordRecognizer**: a chord processing from microphone printing to console. *Warning*:
 Interrupt the program by entering chars, not other keyboard interrupt. 
-- **SwingChordRecognizer**: a chord prossing from microphone with simple swing GUI.
+- **SwingChordRecognizer**: a chord processing from microphone with simple swing GUI.
 
 ## Method and Approach
 
