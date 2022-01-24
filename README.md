@@ -30,9 +30,11 @@ This toolkit has currently the following main component classes:
 
 Avalaible chord sets that can be predicted by the pre-trained neural model is located in the Chord.java class. They are in all keys with only major and minor scale. The chords list given the model output are respectively:
 ```java
+{
     "A#maj", "A#min", "Amaj", "Amin", "Bmaj", "Bmin", "C#maj", "C#min",
     "Cmaj", "Cmin", "D#maj", "D#min", "Dmaj", "Dmin", "Emaj", "Emin",
     "F#maj", "F#min", "Fmaj", "Fmin", "G#maj", "G#min", "Gmaj", "Gmin"
+}
 ```  
 The model is set to have ~0.7 testing accuracy with the testing subset consisting of ~400 samples of chroma (specifically CRP) vectors
 
