@@ -29,7 +29,7 @@ This toolkit has currently the following main component classes:
 ---
 
 *Refer to Usage Example for details. For this example, it is assumed the chord model is loaded in the package*. 
-<br><br>From file, predict chord **cautiously** of all *samples in the file* with the following code
+<br><br>From file, predict chord **cautiously** of *all samples in the file* with the following code
 ```java
 String pathFile = "/path/to/file.wav";
 Signal signal = new WAVFile(new File(pathFile)).getSamples(0);
