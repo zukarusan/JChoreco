@@ -41,7 +41,7 @@ public final class ChordPredictor implements AutoCloseable {
             chordModel = new TFChordLite();
     }
 
-    public static String predict(final float[] crpVector) {
+    public String predict(final float[] crpVector) {
         int i = 0;
         for (float f : crpVector) {
             chromaBuffer[i++] = f;
@@ -58,7 +58,7 @@ public final class ChordPredictor implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         synchronized (ChordPredictor.class) {
             chordModel.close();
             instance = null;
