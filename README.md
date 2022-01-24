@@ -11,7 +11,7 @@ The **main processing tools** in package dir you might want to use are:
 - `Chord Processor`: A sub-*TarsosDSP* class extended from [`AudioProcessor`][3] that wraps Tensorflow model and
   other main processing components
 - `Chord Predictor`: A singleton class that predict the chroma given in the params.
-- `CRP Vector Factory`: A factory for creating chroma object from samples, specifically CRP chroma.
+- `CRP Vector Factory`: A factory for creating chroma object, specifically CRP chroma, from samples given.
 
 This toolkit has currently the following main component classes:
 
