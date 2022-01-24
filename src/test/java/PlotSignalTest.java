@@ -10,6 +10,7 @@ import com.github.zukarusan.choreco.component.sound.MP3File;
 import com.github.zukarusan.choreco.component.sound.SoundFile;
 import com.github.zukarusan.choreco.component.sound.WAVFile;
 import com.github.zukarusan.choreco.component.spectrum.LogFrequencySpectrum;
+import com.github.zukarusan.choreco.system.CRPVectorFactory;
 import com.github.zukarusan.choreco.system.STFT;
 import com.github.zukarusan.choreco.component.Signal;
 import com.github.zukarusan.choreco.system.exception.STFTException;
@@ -55,7 +56,7 @@ public class PlotSignalTest {
         PlotManager.getInstance().waitForClose();
     }
 
-    @Test
+    @Test @Disabled
     public void testFFTPlot() throws STFTException {
         assert url1 != null;
         Signal signal = piano_major.getSamples(0);
@@ -157,14 +158,15 @@ public class PlotSignalTest {
         PlotManager.getInstance().waitForClose();
     }
 
-    @Test @Disabled
+    @Test
     public void testChromaVector() throws STFTException {
         Signal signal = guitar_c.getSamples(0);
 //        STFT stft = new STFT(16384, 8192);
-        SignalFFT freq = STFT.fftPower(signal, signal.getSampleRate());
-        CommonProcessor.logCompress(freq, 1000);
-        LogFrequencyVector logVector = new LogFrequencyVector(freq);
-        CRP crp = new CRP(logVector, 100);
+//        SignalFFT freq = STFT.fftPower(signal, signal.getSampleRate());
+//        CommonProcessor.logCompress(freq, 1000);
+//        LogFrequencyVector logVector = new LogFrequencyVector(freq);
+//        CRP crp = new CRP(logVector, 100);
+        CRP crp = CRPVectorFactory.from_signal(signal);
         crp.plot();
 //        LogFrequencySpectrum logF = new LogFrequencyVector(freq);
 //        CommonProcessor.powerToDb(spectrum);

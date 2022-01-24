@@ -50,7 +50,7 @@ public class BufferTest {
         t_float.close();
     }
 
-    @Test
+    @Test @Disabled
     public void tensorflowTest() throws IOException {
         URL url = getClass().getResource("_IV-raw-testing_.csv");
         URL url_exp = getClass().getResource("_DV-testing_.csv");
