@@ -36,7 +36,7 @@ Signal signal = new WAVFile(new File(pathFile)).getSamples(0);
 
 try (ChordPredictor predictor = ChordPredictor.getInstance()) {
     String chord = predictor.predict(CRPVectorFactory.from_signal(signal));
-    System.out.println(chord)
+    System.out.println(chord);
 }
 ```
 ## Usage example
