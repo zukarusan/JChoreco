@@ -55,7 +55,7 @@ public class PlotSignalTest {
         PlotManager.getInstance().waitForClose();
     }
 
-    @Test @Disabled
+    @Test
     public void testFFTPlot() throws STFTException {
         assert url1 != null;
         Signal signal = piano_major.getSamples(0);
