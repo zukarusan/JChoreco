@@ -2,7 +2,7 @@
 
 ---
 
-A java musical chord recognition utility and DSP tools extended from [TarsosDSP][1]. 
+A java musical chord recognition utility using pre-trained neural network and DSP tools extended from [TarsosDSP][1]. 
 
 > ***WARNING***: This library is still in development that has unorganized source code and some features are not implemented on top of another
 
