@@ -42,7 +42,8 @@ The model is set to have ~0.7 testing accuracy with the testing subset consistin
 
 ---
 
-*Refer to Usage Example for details. For this example, it is assumed the chord model is loaded in the package*. 
+*For all examples, it is assumed the chord model is loaded in the package.
+Refer to Usage Example for details.*
 <br><br>From file, predict chord **cautiously** of *all samples in the file* with the following code
 ```java
 String pathFile = "/path/to/file.wav";
