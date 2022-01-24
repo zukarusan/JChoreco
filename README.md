@@ -150,7 +150,7 @@ The methodology for this project to achieve chord recognition is based on the fo
 
 1. 
 
-[1]: <(https://github.com/JorenSix/TarsosDSP)> "TarsosDSP"
+[1]: <https://github.com/JorenSix/TarsosDSP> "TarsosDSP"
 [2]: https://www.tensorflow.org/jvm/api_docs/
 [3]: https://0110.be/releases/TarsosDSP/TarsosDSP-2.4/TarsosDSP-2.4-Documentation/be/tarsos/dsp/AudioProcessor.html
 [4]: https://0110.be/releases/TarsosDSP/TarsosDSP-2.4/TarsosDSP-2.4-Documentation/be/tarsos/dsp/AudioDispatcher.html
