@@ -6,12 +6,14 @@ import org.tensorflow.Graph;
 import org.tensorflow.GraphOperation;
 import org.tensorflow.SavedModelBundle;
 import org.tensorflow.Session;
+import org.tensorflow.exceptions.TensorFlowException;
 import org.tensorflow.ndarray.Shape;
 import org.tensorflow.ndarray.buffer.DataBuffers;
 import org.tensorflow.ndarray.buffer.FloatDataBuffer;
 import org.tensorflow.types.TFloat32;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -31,11 +33,22 @@ final public class TFChordSTD implements TFChordModel {
             throw new IllegalArgumentException("Input feeder buffer must be the length of chroma vector. " +
                     "Expected: "+Chroma.CHROMATIC_LENGTH+". Given: "+input_feeder.length);
         }
+//        System.out.println("Threads: "+ Thread.activeCount()+"\n");
+//        for (Thread.)
         URL url = this.getClass().getClassLoader().getResource("model_chord");
         this.iBuffer = DataBuffers.of(input_feeder);
+        if (url == null)
+            throw new IllegalStateException("Model not found");
+
+        try {
+            smb = SavedModelBundle.load(url.getPath(), "serve");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException("Error in loading model", e);
+        }
+
         this.input = TFloat32.tensorOf(Shape.of(1, Chroma.CHROMATIC_LENGTH), iBuffer);
-        assert url != null;
-        smb = SavedModelBundle.load(url.getPath(), "serve");
+
         try {
             if (isDebug) {
                 Graph graph = smb.graph();

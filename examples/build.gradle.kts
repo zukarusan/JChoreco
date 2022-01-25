@@ -8,7 +8,7 @@ application {
 }
 
 group = "com.github.zukarusan"
-version = "0.9.0"
+version = "0.1.0"
 
 repositories {
     mavenCentral()
@@ -16,11 +16,8 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
-    implementation(project(":jchoreco"))
-    implementation("com.github.axet:TarsosDSP:2.4")
+    implementation(project(":jchoreco",configuration="shadow"))
 
     implementation("commons-cli:commons-cli:1.5.0")
     implementation("com.opencsv:opencsv:5.5.2")

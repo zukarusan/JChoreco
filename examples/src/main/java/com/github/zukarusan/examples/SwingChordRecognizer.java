@@ -17,7 +17,6 @@ public class SwingChordRecognizer {
     static final float SAMPLE_RATE = 44100;
     static final int BUFFER_SIZE = 44100;
     static ChordProcessor chordProcessor;
-    static BufferedReader chordLabelReader;
     static int WIDTH = 800, HEIGHT = 700;
 
     public static void main(String[] args) throws LineUnavailableException, IOException {
@@ -84,6 +83,7 @@ public class SwingChordRecognizer {
                 liBuffer.close();
             } catch (IOException e) {
                 e.printStackTrace();
+                System.exit(1);
             }
         }));
 
@@ -97,14 +97,15 @@ public class SwingChordRecognizer {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                System.out.println("Releasing Resources");
-                dispatcher.stop();
-                chordProcessor.close();
                 try {
+                    System.out.println("Releasing Resources");
+                    dispatcher.stop();
+                    chordProcessor.close();
                     loBuffer.close();
                     liBuffer.close();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                    System.exit(1);
                 }
                 System.exit(0); // there is still a bug of which a thread running TODO
             }
