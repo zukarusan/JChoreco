@@ -3,8 +3,12 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/chord-recognition.iml" filepath="$PROJECT_DIR$/.idea/modules/chord-recognition.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chord-recognition.main.iml" filepath="$PROJECT_DIR$/.idea/modules/chord-recognition.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chord-recognition.test.iml" filepath="$PROJECT_DIR$/.idea/modules/chord-recognition.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/examples/chord-recognition.examples.iml" filepath="$PROJECT_DIR$/.idea/modules/examples/chord-recognition.examples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/examples/chord-recognition.examples.main.iml" filepath="$PROJECT_DIR$/.idea/modules/examples/chord-recognition.examples.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/examples/chord-recognition.examples.test.iml" filepath="$PROJECT_DIR$/.idea/modules/examples/chord-recognition.examples.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jchoreco/chord-recognition.jchoreco.iml" filepath="$PROJECT_DIR$/.idea/modules/jchoreco/chord-recognition.jchoreco.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jchoreco/chord-recognition.jchoreco.main.iml" filepath="$PROJECT_DIR$/.idea/modules/jchoreco/chord-recognition.jchoreco.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jchoreco/chord-recognition.jchoreco.test.iml" filepath="$PROJECT_DIR$/.idea/modules/jchoreco/chord-recognition.jchoreco.test.iml" />
     </modules>
   </component>
 </project>
