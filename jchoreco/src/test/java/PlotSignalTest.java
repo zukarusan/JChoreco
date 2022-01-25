@@ -175,7 +175,6 @@ public class PlotSignalTest {
 //        crp.plot();
 //        clp.plot();
 //        cp.plot();
-        PlotManager.getInstance().waitForClose();
     }
 
 }

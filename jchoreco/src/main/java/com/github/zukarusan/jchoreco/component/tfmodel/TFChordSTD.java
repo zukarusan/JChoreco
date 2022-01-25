@@ -35,7 +35,7 @@ final public class TFChordSTD implements TFChordModel {
         this.iBuffer = DataBuffers.of(input_feeder);
         this.input = TFloat32.tensorOf(Shape.of(1, Chroma.CHROMATIC_LENGTH), iBuffer);
         assert url != null;
-        smb = SavedModelBundle.load(new File(url.getPath()).getAbsolutePath(), "serve");
+        smb = SavedModelBundle.load(url.getPath(), "serve");
         try {
             if (isDebug) {
                 Graph graph = smb.graph();
