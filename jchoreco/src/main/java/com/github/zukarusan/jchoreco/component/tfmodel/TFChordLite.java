@@ -12,4 +12,9 @@ final public class TFChordLite implements TFChordModel {
     public void close() {
 
     }
+
+    @Override
+    public void load() {
+
+    }
 }

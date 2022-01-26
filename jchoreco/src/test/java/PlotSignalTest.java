@@ -156,7 +156,7 @@ public class PlotSignalTest {
         PlotManager.getInstance().waitForClose();
     }
 
-    @Test
+    @Test @Disabled
     public void testChromaVector() throws STFTException {
         Signal signal = guitar_c.getSamples(0);
 //        STFT stft = new STFT(16384, 8192);

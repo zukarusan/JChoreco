@@ -87,3 +87,5 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 /ann/saved_model/
+/.cache_model
+/jchoreco/.cache_model/

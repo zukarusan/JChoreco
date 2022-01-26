@@ -5,6 +5,7 @@
     <content url="file://$MODULE_DIR$/../../../jchoreco">
       <excludeFolder url="file://$MODULE_DIR$/../../../jchoreco/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../../jchoreco/build" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../jchoreco/.cache_model" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
