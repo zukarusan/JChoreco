@@ -7,6 +7,12 @@ application {
     executableDir = ""
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
 group = "com.github.zukarusan"
 version = "0.1.0"
 
@@ -17,7 +23,7 @@ repositories {
 
 dependencies {
 
-    implementation(project(":jchoreco",configuration="shadow"))
+    implementation(project(":jchoreco"))
 
     implementation("commons-cli:commons-cli:1.5.0")
     implementation("com.opencsv:opencsv:5.5.2")

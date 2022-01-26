@@ -12,6 +12,6 @@
         <module name="chord-recognition.jchoreco.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="15" />
+    <bytecodeTargetLevel target="11" />
   </component>
 </project>

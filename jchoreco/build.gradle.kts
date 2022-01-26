@@ -9,6 +9,15 @@ plugins {
 group = "com.github.zukarusan"
 version = "0.9.1"
 
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
+
+
 repositories {
     mavenCentral()
     maven(url = "https://jitpack.io")

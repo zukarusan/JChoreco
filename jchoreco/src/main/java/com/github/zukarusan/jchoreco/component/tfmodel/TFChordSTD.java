@@ -35,11 +35,11 @@ final public class TFChordSTD implements TFChordModel {
     SavedModelBundle smb;
     private boolean isClose = false;
 
-    private boolean cleanCache(File cacheDir) {
+    private boolean clean(File cacheDir) {
         File[] allContents = cacheDir.listFiles();
         if (allContents != null) {
             for (File file : allContents) {
-                if (cleanCache(file)) throw new IllegalStateException("Cannot clean model cache");
+                if (clean(file)) throw new IllegalStateException("Cannot clean model cache");
             }
         }
         return !cacheDir.delete();
@@ -54,7 +54,7 @@ final public class TFChordSTD implements TFChordModel {
         try {
             if (!model_dir.exists() || overwrite) {
                 if (overwrite) {
-                    if (cleanCache(model_dir)) throw new IllegalStateException("Cannot overwrite model cache");;
+                    if (clean(model_dir)) throw new IllegalStateException("Cannot overwrite model cache");;
                 }
                 if (!model_dir.mkdirs()) throw new IllegalStateException("Cannot create dir model cache");
                 URL url = getClass().getProtectionDomain().getCodeSource().getLocation();
@@ -138,7 +138,9 @@ final public class TFChordSTD implements TFChordModel {
 
     @Override
     public int predict() {
-        assert !isClose;
+        if (isClose) {
+            throw new IllegalCallerException("Processor is closed!");
+        }
         int max = 0;
         input.write(iBuffer);
         try(TFloat32 outTensor = (TFloat32) runner.run().get(0)) {
@@ -157,6 +159,7 @@ final public class TFChordSTD implements TFChordModel {
     public void close() {
         smb.close();
         input.close();
+        if (clean(model_dir)) System.out.println("Warning: cache deletion");
         isClose = true;
     }
 }
