@@ -38,6 +38,30 @@ Avalaible chord sets that can be predicted by the pre-trained neural model is lo
 ```  
 The model is set to have ~0.7 testing accuracy with the testing subset consisting of ~400 samples of chroma (specifically CRP) vectors
 
+## Dependencies
+
+---
+
+**For easy quick use**:<br>Use full-bundled fat jar `jchoreco-x.x.x-all.jar` without implementing any dependencies in your code
+(But this might cause big-sized package in your built app)
+
+***Otherwise***,<br>
+Use smaller-packaged `jchoreco-x.x.x.jar` and the following dependencies must be included in your maven/gradle. 
+
+```kotlin
+// gradle (kotlin)
+implementation("com.github.axet:TarsosDSP:2.4") // TarsosDSP libraries
+implementation("com.github.wendykierp:JTransforms:3.1") // Pure java FFT libraries
+implementation("org.tensorflow:tensorflow-core-platform:0.4.0") // Tensorflow API
+implementation("javazoom:jlayer:1.0.1") // MP3 Decoder
+```
+
+### Optional dependencies
+```kotlin
+implementation("org.apache.commons:commons-math3:3.6.1") // For CommonProcessor tools
+implementation("com.github.yannrichet:JMathPlot:1.0.1") // For plotting using swing ui
+```
+
 ## Quick wrap example
 
 ---
