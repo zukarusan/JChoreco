@@ -46,7 +46,7 @@ The model is set to have ~0.7 testing accuracy with the testing subset consistin
 **For easy quick use**:<br>Import full-bundled fat jar library, [`jchoreco-x.x.x-all.jar`][6], without implementing any dependencies in your code
 (But this might cause big-sized package in your built app)
 
-***Otherwise***,<br>
+***Otherwise, for lightweight use***:<br>
 Use smaller-packaged, [`jchoreco-x.x.x.jar`][7], and the following dependencies must be included in your maven/gradle. 
 
 ```kotlin
