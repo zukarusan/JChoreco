@@ -47,19 +47,20 @@ The model is set to have ~0.7 testing accuracy with the testing subset consistin
 (But this might cause big-sized package in your built app)
 
 ***Otherwise, for lightweight use***:<br>
-Use locally the smaller-packaged, [`jchoreco-x.x.x.jar`][7], and if there's no maven/gradle local jar configuration, the following dependencies must be manually included in your project. 
+Use locally the smaller-packaged, [`jchoreco-x.x.x.jar`][7], and the following dependencies must be manually included in your project. 
 
 ```java
-"com.github.axet:TarsosDSP:2.4" // TarsosDSP libraries
-"com.github.wendykierp:JTransforms:3.1" // Pure java FFT libraries
-"org.tensorflow:tensorflow-core-platform:0.4.0" // Tensorflow API
-"javazoom:jlayer:1.0.1" // MP3 Decoder
+// gradle example (kotlin)
+implementation("com.github.axet:TarsosDSP:2.4") // TarsosDSP libraries
+implementation("com.github.wendykierp:JTransforms:3.1") // Pure java FFT libraries
+implementation("org.tensorflow:tensorflow-core-platform:0.4.0") // Tensorflow API
+implementation("javazoom:jlayer:1.0.1") // MP3 Decoder
 ```
 
 ### Optional dependencies
 ```kotlin
-"org.apache.commons:commons-math3:3.6.1" // For CommonProcessor tools
-"com.github.yannrichet:JMathPlot:1.0.1" // For plotting using swing ui
+implementation("org.apache.commons:commons-math3:3.6.1") // For CommonProcessor tools
+implementation("com.github.yannrichet:JMathPlot:1.0.1") // For plotting using swing ui
 ```
 
 ## Quick wrap example
