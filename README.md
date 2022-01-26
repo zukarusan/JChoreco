@@ -41,6 +41,7 @@ The model is set to have ~0.7 testing accuracy with the testing subset consistin
 ## Install and Dependencies
 
 ---
+### Require min: Java 15
 
 **For easy quick use**:<br>Import full-bundled fat jar library, [`jchoreco-x.x.x-all.jar`][6], without implementing any dependencies in your code
 (But this might cause big-sized package in your built app)
