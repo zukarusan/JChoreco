@@ -38,15 +38,15 @@ Avalaible chord sets that can be predicted by the pre-trained neural model is lo
 ```  
 The model is set to have ~0.7 testing accuracy with the testing subset consisting of ~400 samples of chroma (specifically CRP) vectors
 
-## Dependencies
+## Install and Dependencies
 
 ---
 
-**For easy quick use**:<br>Use full-bundled fat jar `jchoreco-x.x.x-all.jar` without implementing any dependencies in your code
+**For easy quick use**:<br>Import full-bundled fat jar library, [`jchoreco-x.x.x-all.jar`][6], without implementing any dependencies in your code
 (But this might cause big-sized package in your built app)
 
 ***Otherwise***,<br>
-Use smaller-packaged `jchoreco-x.x.x.jar` and the following dependencies must be included in your maven/gradle. 
+Use smaller-packaged, [`jchoreco-x.x.x.jar`][7], and the following dependencies must be included in your maven/gradle. 
 
 ```kotlin
 // gradle (kotlin)
@@ -192,3 +192,5 @@ The methodology for this project to achieve chord recognition is based on the fo
 [3]: https://0110.be/releases/TarsosDSP/TarsosDSP-2.4/TarsosDSP-2.4-Documentation/be/tarsos/dsp/AudioProcessor.html
 [4]: https://0110.be/releases/TarsosDSP/TarsosDSP-2.4/TarsosDSP-2.4-Documentation/be/tarsos/dsp/AudioDispatcher.html
 [5]: https://github.com/JorenSix/TarsosDSP#tarsosdsp-example-applications
+[6]: https://github.com/zukarusan/JChoreco/releases/download/v0.9.1/jchoreco-0.9.1-all.jar
+[7]: https://github.com/zukarusan/JChoreco/releases/download/v0.9.1/jchoreco-0.9.1.jar
