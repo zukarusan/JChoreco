@@ -43,18 +43,17 @@ The model is set to have ~0.7 testing accuracy with the testing subset consistin
 ---
 ### Require min: Java 11
 
-**For easy quick use**:<br>Import full-bundled fat jar library, [`jchoreco-x.x.x-all.jar`][6], without implementing any dependencies in your code
+**For easy quick use**:<br>Import locally the full-bundled fat jar library, [`jchoreco-x.x.x-all.jar`][6], without implementing any dependencies in your code
 (But this might cause big-sized package in your built app)
 
 ***Otherwise, for lightweight use***:<br>
-Use smaller-packaged, [`jchoreco-x.x.x.jar`][7], and the following dependencies must be included in your maven/gradle. 
+Use smaller-packaged, [`jchoreco-x.x.x.jar`][7], and if there's no maven/gradle local jar configuration, the following dependencies must be included in your project. 
 
-```kotlin
-// gradle (kotlin)
-implementation("com.github.axet:TarsosDSP:2.4") // TarsosDSP libraries
-implementation("com.github.wendykierp:JTransforms:3.1") // Pure java FFT libraries
-implementation("org.tensorflow:tensorflow-core-platform:0.4.0") // Tensorflow API
-implementation("javazoom:jlayer:1.0.1") // MP3 Decoder
+```java
+"com.github.axet:TarsosDSP:2.4" // TarsosDSP libraries
+"com.github.wendykierp:JTransforms:3.1" // Pure java FFT libraries
+"org.tensorflow:tensorflow-core-platform:0.4.0" // Tensorflow API
+"javazoom:jlayer:1.0.1" // MP3 Decoder
 ```
 
 ### Optional dependencies
