@@ -47,7 +47,7 @@ The model is set to have ~0.7 testing accuracy with the testing subset consistin
 (But this might cause big-sized package in your built app)
 
 ***Otherwise, for lightweight use***:<br>
-Use locally the smaller-packaged, [`jchoreco-x.x.x.jar`][7], and if there's no maven/gradle local jar configuration, the following dependencies must be included in your project. 
+Use locally the smaller-packaged, [`jchoreco-x.x.x.jar`][7], and if there's no maven/gradle local jar configuration, the following dependencies must be manually included in your project. 
 
 ```java
 "com.github.axet:TarsosDSP:2.4" // TarsosDSP libraries
