@@ -10,7 +10,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../jchoreco/build/libs/jchoreco-0.9.0-all.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../../jchoreco/build/libs/jchoreco-0.9.1-all.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
