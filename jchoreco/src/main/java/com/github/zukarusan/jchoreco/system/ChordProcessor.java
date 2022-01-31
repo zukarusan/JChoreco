@@ -17,19 +17,19 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 
 public class ChordProcessor implements AudioProcessor, AutoCloseable{
-    static boolean _IS_ANDROID_ = (System.getProperty("java.specification.vendor").contains("Android"));
-    static public boolean isDebug = false;
+    protected static boolean _IS_ANDROID_ = (System.getProperty("java.specification.vendor").contains("Android"));
+    public static boolean isDebug = false;
 
     @Getter
-    private final int[] freqMaps;
-    private final float[] _FFT_BUFFER_;
-    private final float[] _PITCH_BUFFER_;
-    private final float[] _CRP_BUFFER_;
-    private final int bufferSize;
-    private final float sampleRate;
-    private final STFT fftWindower;
-    private final TFChordModel chordModel;
-    private final PrintStream predicted;
+    protected final int[] freqMaps;
+    protected final float[] _FFT_BUFFER_;
+    protected final float[] _PITCH_BUFFER_;
+    protected final float[] _CRP_BUFFER_;
+    protected final int bufferSize;
+    protected final float sampleRate;
+    protected final STFT fftWindower;
+    protected final TFChordModel chordModel;
+    protected final PrintStream predicted;
 
     public ChordProcessor(float sampleRate, int bufferSize, PrintStream predicted) {
         this.bufferSize = bufferSize;
