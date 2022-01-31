@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":jchoreco:test" external.linked.project.path="$MODULE_DIR$/../../../jchoreco" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="com.github.zukarusan" external.system.module.type="sourceSet" external.system.module.version="0.9.1" type="JAVA_MODULE" version="4">
+<module external.linked.project.id=":jchoreco:test" external.linked.project.path="$MODULE_DIR$/../../../jchoreco" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="com.github.zukarusan" external.system.module.type="sourceSet" external.system.module.version="0.9.2" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager">
     <output-test url="file://$MODULE_DIR$/../../../jchoreco/build/classes/java/test" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../jchoreco/build/generated/sources/annotationProcessor/java/test">
-      <sourceFolder url="file://$MODULE_DIR$/../../../jchoreco/build/generated/sources/annotationProcessor/java/test" isTestSource="true" generated="true" />
-    </content>
     <content url="file://$MODULE_DIR$/../../../jchoreco/src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../../jchoreco/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../jchoreco/src/test/resources" type="java-test-resource" />
