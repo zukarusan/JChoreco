@@ -186,7 +186,32 @@ Interrupt the program by entering chars, not other keyboard interrupt.
 
 The methodology for this project to achieve chord recognition is based on the following works:
 
-1. 
+1. Abadi, Martín, Ashish Agarwal, Paul Barham, Eugene Brevdo, Zhifeng Chen, Craig Citro, Greg S. Corrado, et al. 2015. “TensorFlow: Large-scale machine learning on heterogeneous systems,” Software available from tensorflow.org. https://www.tensorflow.org/.
+2. Chollet, François. 2015. “keras.” 2.7.0. GitHub. https://github.com/fchollet/keras.
+3. Chordify B.V. n.d. “About Chordify.” Chordify. Accessed 2022. https://chordify.net/pages/about/.
+4. Fujishima, Takuya. 1999. “Realtime Chord Recognition of Musical Sound: a System Using Common Lisp Music.” 1999. https://quod.lib.umich.edu/i/icmc/bbp2372.1999.446/1.
+5. Garg, Vijay K. 2007. “Pulse Code Modulation.” In Wireless Communications & Networking. N.p.: Elsevier Science.
+6. Harris, Sarah L., and David Harris. 2021. “3.4.2 State Encodings.” In Digital Design and Computer Architecture, RISC-V Edition. N.p.: Elsevier Science.
+7. Jiang, Nanzhu, Peter Grosche, Verena Konz, and Meinard Müller. 2011. “Analyzing Chroma Feature Types for Automated Chord Recognition.” https://www.researchgate.net/publication/228445808_Analyzing_Chroma_Feature_Types_for_Automated_Chord_Recognition/comments.
+8. Jones, Russell. 2007. Understanding Basic Music Theory. Edited by Catherine Schmidt-Jones. http://cnx.org/content/col10363/1.3/.
+9. Mauch, Matthias, and Chris Cannam. n.d. “Chordino and NNLS Chroma.” isophonics. Accessed 2022. http://www.isophonics.net/nnls-chroma.
+10. Mauch, Matthias, and Simon Dixon. 2010. “Approximate Note Transcription for the Improved Identification of Difficult Chords.” Proceedings of the 11th International Society for Music Information Retrieval Conference (ISMIR 2010). https://www.researchgate.net/publication/220723830_Approximate_Note_Transcription_for_the_Improved_Identification_of_Difficult_Chords.
+11. Microsoft. n.d. “FileDialog Class.” Microsoft Documentation. Accessed January, 2022. https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.filedialog.
+12. Müller, Meinard. 2007. Information Retrieval for Music and Motion. N.p.: Springer.
+13. Müller, Meinard, and Sebastian Ewert. 2010. “Towards Timbre-Invariant Audio Features for Harmony-Based Music.” IEEE Transactions on Audio Speech and Language Processing 18 (3): 649 - 662. 10.1109/TASL.2010.2041394.
+14. O'Donnell, Michael J. 2004. “Digital Sound Modeling lecture notes for Com Sci 295.” Perceptual Foundations of Sound. http://people.cs.uchicago.edu/~odonnell/Scholar/Work_in_progress/Digital_Sound_Modelling/lectnotes/node4.html.
+15. Oracle Corporation. 2021. “JavaFX Documentation Project.” GitHub Pages. https://fxdocs.github.io/docs/html5/.
+16. Osmalskyj, Julien, Jean J. Embrechts, Marc V. Droogenbroeck, and Sébastien Piérard. 2012. “Neural networks for musical chords recognition.” (January). https://www.researchgate.net/publication/252067543_Neural_networks_for_musical_chords_recognition.
+17. Peeters, Geoffroy. 2006. “Chroma-based estimation of musical key from audio-signal analysis.” (October). https://www.researchgate.net/publication/220723813_Chroma-based_estimation_of_musical_key_from_audio-signal_analysis.
+18. “Pulse-Code Modulation Codec-Filters.” 2018. In The Communications Handbook, edited by Jerry D. Gibson. N.p.: CRC Press.
+19. Reenskaug, Trygve. 1979. “Models-Views-Controllers,” A whitepaper report of MVC. https://folk.universitetetioslo.no/trygver/1979/mvc-2/1979-12-MVC.pdf.
+20. Shah, Ayush K., Manasi Kattel, Araju Nepal, and D. Shrestha. 2019. “Chroma Feature Extraction.” (January). https://www.researchgate.net/publication/330796993_Chroma_Feature_Extraction.
+21. Sheh, Alexander, and Daniel P. Ellis. 2003. “Chord Segmentation and Recognition using EM-Trained Hidden Markov Models.” https://www.researchgate.net/publication/36709060_Chord_Segmentation_and_Recognition_using_EM-Trained_Hidden_Markov_Models.
+22. Six, Joren, Olmo Cornelis, and Marc Leman. 2014. “TarsosDSP, a Real-Time Audio Processing Framework in Java.” Proceedings of the 53rd AES Conference (AES 53rd). http://0110.be/files/attachments/411/aes53_tarsos_dsp.pdf.
+23. Wendykier, Piotr. 2015. “JTransforms.” 3.1. https://github.com/wendykierp/JTransforms.
+24. Witte, Jorine. 2021. “AI-technology behind the chords of Chordify - our algorithm explained - Blog.” Chordify. https://chordify.net/pages/technology-algorithm-explained/.
+25. Zhou, Xinquan, and Alexander Lerch. 2015. “Chord Detection Using Deep Learning.” International Conference on Music Information Retrieval (ISMIR), (January). https://www.researchgate.net/publication/282859516_Chord_Detection_Using_Deep_Learning.
+
 
 [1]: <https://github.com/JorenSix/TarsosDSP> "TarsosDSP"
 [2]: https://www.tensorflow.org/jvm/api_docs/
